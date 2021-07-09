@@ -29,7 +29,7 @@ public class LoginController {
         List<String> userEmail = userRepository.getMatchingUserEmail(loginModel.getEmail(), 1);
         List<String> hashedPasswordUserId = userRepository.getMatchingUserHashedPassword(hashedPassword, 1);
 
-        System.out.println(hashedPasswordUserId.get(0));
+//        System.out.println(hashedPasswordUserId.get(0));
         if(!userID.isEmpty() && userID.size() == 1){
             return userID.get(0);
         }
