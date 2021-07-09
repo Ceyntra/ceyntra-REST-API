@@ -21,18 +21,34 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
     @PostMapping("/login")
-    public LoginModel login(@RequestBody LoginModel loginModel){
+    public String login(@RequestBody LoginModel loginModel){
 
         String hashedPassword = loginService.doHash(loginModel.getPassword());
 
-        List<String> userID = userRepository.getLoggedInUserId(loginModel.getEmail(), loginModel.getPassword());
+        List<String> userID = userRepository.getMatchingUserIdForCredential(loginModel.getEmail(), hashedPassword, 1);
+        List<String> userEmail = userRepository.getMatchingUserEmail(loginModel.getEmail(), 1);
+        List<String> hashedPasswordUserId = userRepository.getMatchingUserHashedPassword(hashedPassword, 1);
 
+        System.out.println(hashedPasswordUserId.get(0));
+        if(!userID.isEmpty() && userID.size() == 1){
+            return userID.get(0);
+        }
+        else if(userID.isEmpty())
+        {
+            if(userEmail.size() > 0 || hashedPasswordUserId.size() > 0){
+                return "emailOrPasswordIsIncorrect";
+            }
+            else if(userEmail.isEmpty() && hashedPasswordUserId.isEmpty())
+            {
+                return "userNotFound";
+            }
+        }
 
         System.out.println("we are now in the login");
-        System.out.println(hashedPassword);
+
         System.out.println(userID);
 
 
-        return loginModel;
+        return "";
     }
 }
