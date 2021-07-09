@@ -23,13 +23,5 @@ public class UserController {
         return userRepository.findAll();
     }
 
-    @PostMapping("/login")
-    public LoginModel login(@RequestBody LoginModel loginModel){
-        System.out.println(loginModel.getEmail());
-        List<String> userID = userRepository.getLoggedInUserId(loginModel.getEmail(), loginModel.getPassword());
-        System.out.println(userID);
 
-
-        return loginModel;
-    }
 }
