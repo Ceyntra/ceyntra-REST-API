@@ -1,27 +1,56 @@
 package com.ceyntra.ceyntraRestAPI.controller;
+
 import com.ceyntra.ceyntraRestAPI.model.LoginModel;
+import com.ceyntra.ceyntraRestAPI.model.LoginStateModel;
+import com.ceyntra.ceyntraRestAPI.model.UserModel;
 import com.ceyntra.ceyntraRestAPI.repository.UserRepository;
+import com.ceyntra.ceyntraRestAPI.service.Encryption;
 import com.ceyntra.ceyntraRestAPI.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*")
+@SessionAttributes({"name"})
+@CrossOrigin("*")
 public class LoginController {
-
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private LoginService loginService;
+
+    public LoginController() throws NoSuchAlgorithmException {
+    }
+
+    @GetMapping("/getUser/{id}")
+    public UserModel getUserDetailsById(@PathVariable int id)
+    {
+
+
+       UserModel user1 =  userRepository.findById(id).get();
+
+       return new UserModel(user1.getEmail(), user1.getTelephone());
+    }
+
+
     @PostMapping("/login")
-    public String login(@RequestBody LoginModel loginModel){
+    public String login(@RequestBody LoginModel loginModel, HttpServletRequest request) {
+
 
         String hashedPassword = loginService.doHash(loginModel.getPassword());
 
@@ -30,16 +59,14 @@ public class LoginController {
         List<String> hashedPasswordUserId = userRepository.getMatchingUserHashedPassword(hashedPassword, 1);
 
 //        System.out.println(hashedPasswordUserId.get(0));
-        if(!userID.isEmpty() && userID.size() == 1){
+        if (!userID.isEmpty() && userID.size() == 1) {
+            UserModel user1 = userRepository.findById(Integer.parseInt(userID.get(0))).get();
+                userRepository.updateUserLoggedInStatus(1, Integer.parseInt(userID.get(0)));
             return userID.get(0);
-        }
-        else if(userID.isEmpty())
-        {
-            if(userEmail.size() > 0 || hashedPasswordUserId.size() > 0){
+        } else if (userID.isEmpty()) {
+            if (userEmail.size() > 0 || hashedPasswordUserId.size() > 0) {
                 return "emailOrPasswordIsIncorrect";
-            }
-            else if(userEmail.isEmpty() && hashedPasswordUserId.isEmpty())
-            {
+            } else if (userEmail.isEmpty() && hashedPasswordUserId.isEmpty()) {
                 return "userNotFound";
             }
         }
@@ -51,4 +78,68 @@ public class LoginController {
 
         return "";
     }
+
+    @Autowired
+    Encryption encryption;
+    SecretKey key = encryption.generateKey(128);
+    IvParameterSpec ivParameterSpec = encryption.generateIv();
+
+    String algorithm = "AES/CBC/PKCS5Padding";
+
+    @PostMapping("/encryptUserId/{userId}")
+    public String  encryptUserId(@PathVariable String userId) throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+        String cipherText = encryption.encrypt(algorithm, userId, key, ivParameterSpec);
+        System.out.println(cipherText);
+        return cipherText;
+    }
+
+    @PostMapping("/decryptUserId/{encryptedUserId}")
+    public String  decryptUserId(@RequestBody String encryptedUserId) throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+        String plainText = encryption.decrypt(algorithm, encryptedUserId, key, ivParameterSpec);
+        System.out.println(plainText);
+        return plainText;
+    }
+
+    public String  decryptUserIdFunc(String encryptedUserId) throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+        String plainText = encryption.decrypt(algorithm, encryptedUserId, key, ivParameterSpec);
+        System.out.println(plainText);
+        return plainText;
+    }
+
+    @PostMapping("/checkLoginStatus/{cipherText}")
+    public LoginStateModel checkLoginStatus(@PathVariable String cipherText) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+
+
+        System.out.println(cipherText);
+        int userId = Integer.parseInt(decryptUserIdFunc(cipherText));
+
+        List<String> userState = userRepository.checkLoginStatusOnUser(userId);
+        LoginStateModel loginStateModel = new LoginStateModel(Integer.parseInt(userState.get(0)), userId);
+        return loginStateModel;
+
+    }
+
+
+
+
+
+
+//    @PostMapping("/persistMessage")
+//    public String persistMessage(@RequestParam("msg") String msg, HttpServletRequest request) {
+//        @SuppressWarnings("unchecked")
+//        List<String> isLoggedIn = (List<String>) request.getSession().getAttribute("IS_LOGGED_IN");
+//        if (isLoggedIn == null) {
+//            isLoggedIn = new ArrayList<>();
+//            request.getSession().setAttribute("MY_SESSION_MESSAGES", isLoggedIn);
+//        }
+//        isLoggedIn.add(msg);
+//        request.getSession().setAttribute("MY_SESSION_MESSAGES", isLoggedIn);
+//        return "redirect:/";
+//    }
+//
+//    @PostMapping("/destroy")
+//    public String destroySession(HttpServletRequest request) {
+//        request.getSession().invalidate();
+//        return "redirect:/";
+//    }
 }

@@ -10,21 +10,29 @@ import javax.persistence.Table;
 @Table(name = "user")
 public class UserModel {
 
+
     @Id
-
     private int userID;
-
-    private  String email;
-
-    private  String telephone;
-
+    private String email;
+    private String telephone;
     @Column(name = "user_type")
-    private  int userType;
-
+    private int userType;
     @Column(name = "hashed_password")
     private String hashedPassword;
+    @Column(name = "is_logged_in")
+    private int isLoggedIn;
+
 
     public UserModel() {
+    }
+
+    public UserModel(String email, String telephone) {
+        this.email = email;
+        this.telephone = telephone;
+    }
+
+    public UserModel(String email) {
+        this.email = email;
     }
 
     public int getUserID() {
@@ -67,14 +75,11 @@ public class UserModel {
         this.hashedPassword = hashedPassword;
     }
 
-    @Override
-    public String toString() {
-        return "UserModel{" +
-                "userID=" + userID +
-                ", email='" + email + '\'' +
-                ", telephone='" + telephone + '\'' +
-                ", userType=" + userType +
-                ", hashedPassword='" + hashedPassword + '\'' +
-                '}';
+    public int getIsLoggedIn() {
+        return isLoggedIn;
+    }
+
+    public void setIsLoggedIn(int isLoggedIn) {
+        this.isLoggedIn = isLoggedIn;
     }
 }
