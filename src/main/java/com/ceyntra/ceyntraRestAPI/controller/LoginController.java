@@ -29,47 +29,47 @@ import java.util.List;
 @CrossOrigin("*")
 public class LoginController {
 
-    @Autowired
-    Encryption encryption;
-    IvParameterSpec  ivParameterSpec=  encryption.generateIv();
-    SecretKey key = encryption.generateKey(128);
-    String algorithm = "AES/CBC/PKCS5Padding";
-
-    @Scheduled(fixedRate = 24*60000)
-    public void gen() throws NoSuchAlgorithmException {
-      ivParameterSpec =  encryption.generateIv();
-        key = encryption.generateKey(128);
-//        System.out.println(ivParameterSpec.getIV());
-    }
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private LoginService loginService;
-
     public LoginController() throws NoSuchAlgorithmException {
     }
 
-    @GetMapping("/getUser/{id}")
-    public UserModel getUserDetailsById(@PathVariable int id)
-    {
-       UserModel user1 =  userRepository.findById(id).get();
-       return new UserModel(user1.getEmail(), user1.getTelephone());
+    @Autowired
+    Encryption encryption;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private LoginService loginService;
+    IvParameterSpec ivParameterSpec = encryption.generateIv();
+    SecretKey key = encryption.generateKey(128);
+    String algorithm = "AES/CBC/PKCS5Padding";
+
+    //  function for change security key after every day
+    @Scheduled(fixedRate = 24 * 60000)
+    public void changeSecurityAndIVKey() throws NoSuchAlgorithmException {
+        ivParameterSpec = encryption.generateIv();
+        key = encryption.generateKey(128);
     }
 
+    //   function for get user email by user Id
+    @GetMapping("/getUser/{id}")
+    public UserModel getUserDetailsById(@PathVariable int id) {
+        UserModel user1 = userRepository.findById(id).get();
+        return new UserModel(user1.getEmail(), user1.getTelephone());
+    }
 
+    //  login function, validate password and user name , after validation send userID to the front end and
+    //   set user isLoggedIn column to 1
     @PostMapping("/login")
-    public String login(@RequestBody LoginModel loginModel, HttpServletRequest request) {
+    public String login(@RequestBody LoginModel loginModel) {
         String hashedPassword = loginService.doHash(loginModel.getPassword());
 
         List<String> userID = userRepository.getMatchingUserIdForCredential(loginModel.getEmail(), hashedPassword, 1);
         List<String> userEmail = userRepository.getMatchingUserEmail(loginModel.getEmail(), 1);
         List<String> hashedPasswordUserId = userRepository.getMatchingUserHashedPassword(hashedPassword, 1);
 
-//        System.out.println(hashedPasswordUserId.get(0));
+    //  check if there is matching user
         if (!userID.isEmpty() && userID.size() == 1) {
             UserModel user1 = userRepository.findById(Integer.parseInt(userID.get(0))).get();
-                userRepository.updateUserLoggedInStatus(1, Integer.parseInt(userID.get(0)));
+            userRepository.updateUserLoggedInStatus(1, Integer.parseInt(userID.get(0)));
             return userID.get(0);
         } else if (userID.isEmpty()) {
             if (userEmail.size() > 0 || hashedPasswordUserId.size() > 0) {
@@ -79,40 +79,36 @@ public class LoginController {
             }
         }
 
-        System.out.println("we are now in the login");
-
-        System.out.println(userID);
-
-
         return "";
     }
 
 
-
+    //   function for encrypt user Id
     @PostMapping("/encryptDetails")
-    public String  encryptUserId(@RequestBody EncryptedDetails encryptedDetails) throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
-//        byte[] decodedKey = Base64.getDecoder().decode(encryptedDetails.getRandomKey());
-//        SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
-
+    public String encryptUserId(@RequestBody EncryptedDetails encryptedDetails) throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
         String cipherText = encryption.encrypt(algorithm, encryptedDetails.getUserId(), key, ivParameterSpec);
         System.out.println(cipherText);
         return cipherText;
     }
 
-    @GetMapping("/logout/{key3}")
-    public String logout(@PathVariable String key3) throws NoSuchAlgorithmException {
-        return  null;
+//    logout function
+    @PostMapping("/logout")
+    public int logout(@RequestBody CipherTextModel cipherText) throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+
+        int userId = Integer.parseInt(decryptUserIdFunc(cipherText.getCipherText(), key));
+       int response =  userRepository.updateUserLoggedInStatus(0, userId);
+
+       return  response;
     }
 
-
-
-    public String  decryptUserIdFunc(String encryptedUserId, SecretKey key) throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+//    function for decrypt user Id
+    public String decryptUserIdFunc(String encryptedUserId, SecretKey key) throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
         try {
             String plainText = encryption.decrypt(algorithm, encryptedUserId, key, ivParameterSpec);
             System.out.println(plainText);
             return plainText;
         } catch (NoSuchPaddingException e) {
-           return e.getMessage();
+            return e.getMessage();
         } catch (NoSuchAlgorithmException e) {
             return e.getMessage();
         } catch (InvalidAlgorithmParameterException e) {
@@ -128,53 +124,23 @@ public class LoginController {
 
     }
 
+//    check logging state
     @PostMapping("/checkLoginStatus")
     public LoginStateModel checkLoginStatus(@RequestBody CipherTextModel cipherText) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
-
         try {
-
-//            byte[] decodedKey = Base64.getDecoder().decode(cipherText.getRandomKey());
-//            SecretKey originalKey2 = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
-
             System.out.println(cipherText.getCipherText());
             int userId = Integer.parseInt(decryptUserIdFunc(cipherText.getCipherText(), key));
-            System.out.println("userId "+userId);
+            System.out.println("userId " + userId);
 
             List<String> userState = userRepository.checkLoginStatusOnUser(userId);
             LoginStateModel loginStateModel = new LoginStateModel(Integer.parseInt(userState.get(0)), userId);
             return loginStateModel;
 
-        } catch (Exception e){
-
+        } catch (Exception e) {
             return new LoginStateModel();
-
         }
-
-
     }
 
 
-
-
-
-
-//    @PostMapping("/persistMessage")
-//    public String persistMessage(@RequestParam("msg") String msg, HttpServletRequest request) {
-//        @SuppressWarnings("unchecked")
-//        List<String> isLoggedIn = (List<String>) request.getSession().getAttribute("IS_LOGGED_IN");
-//        if (isLoggedIn == null) {
-//            isLoggedIn = new ArrayList<>();
-//            request.getSession().setAttribute("MY_SESSION_MESSAGES", isLoggedIn);
-//        }
-//        isLoggedIn.add(msg);
-//        request.getSession().setAttribute("MY_SESSION_MESSAGES", isLoggedIn);
-//        return "redirect:/";
-//    }
-//
-//    @PostMapping("/destroy")
-//    public String destroySession(HttpServletRequest request) {
-//        request.getSession().invalidate();
-//        return "redirect:/";
-//    }
 }
