@@ -2,7 +2,7 @@ package com.ceyntra.ceyntraRestAPI.model;
 
 public class EncryptedDetails {
     private String userId;
-    private String randomKey;
+//    private String randomKey;
 
     public String getUserId() {
         return userId;
@@ -12,11 +12,11 @@ public class EncryptedDetails {
         this.userId = userId;
     }
 
-    public String getRandomKey() {
-        return randomKey;
-    }
-
-    public void setRandomKey(String randomKey) {
-        this.randomKey = randomKey;
-    }
+//    public String getRandomKey() {
+//        return randomKey;
+//    }
+//
+//    public void setRandomKey(String randomKey) {
+//        this.randomKey = randomKey;
+//    }
 }

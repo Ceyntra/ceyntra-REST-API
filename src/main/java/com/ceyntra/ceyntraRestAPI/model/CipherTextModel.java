@@ -2,15 +2,15 @@ package com.ceyntra.ceyntraRestAPI.model;
 
 public class CipherTextModel {
     private String cipherText;
-    private String randomKey;
+//    private String randomKey;
 
-    public String getRandomKey() {
-        return randomKey;
-    }
-
-    public void setRandomKey(String randomKey) {
-        this.randomKey = randomKey;
-    }
+//    public String getRandomKey() {
+//        return randomKey;
+//    }
+//
+//    public void setRandomKey(String randomKey) {
+//        this.randomKey = randomKey;
+//    }
 
     public String getCipherText() {
         return cipherText;
