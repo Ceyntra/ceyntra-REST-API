@@ -42,10 +42,29 @@ public class Encryption {
             InvalidAlgorithmParameterException, InvalidKeyException,
             BadPaddingException, IllegalBlockSizeException {
 
-        Cipher cipher = Cipher.getInstance(algorithm);
-        cipher.init(Cipher.DECRYPT_MODE, key, iv);
-        byte[] plainText = cipher.doFinal(Base64.getDecoder()
-                .decode(cipherText));
-        return new String(plainText);
+        try {
+            Cipher cipher = Cipher.getInstance(algorithm);
+            cipher.init(Cipher.DECRYPT_MODE, key, iv);
+            byte[] plainText = cipher.doFinal(Base64.getDecoder()
+                    .decode(cipherText));
+            return new String(plainText);
+        } catch (NoSuchAlgorithmException e) {
+          return e.getMessage();
+        } catch (NoSuchPaddingException e) {
+            return e.getMessage();
+        } catch (InvalidKeyException e) {
+            return e.getMessage();
+        } catch (InvalidAlgorithmParameterException e) {
+            return e.getMessage();
+        } catch (IllegalBlockSizeException e) {
+            return e.getMessage();
+        } catch (BadPaddingException e) {
+            return  e.getMessage();
+        }
+        catch(IllegalArgumentException e){
+            return  e.getMessage();
+        }
+
+
     }
 }

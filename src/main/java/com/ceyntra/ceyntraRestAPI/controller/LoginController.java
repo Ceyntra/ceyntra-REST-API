@@ -1,8 +1,6 @@
 package com.ceyntra.ceyntraRestAPI.controller;
 
-import com.ceyntra.ceyntraRestAPI.model.LoginModel;
-import com.ceyntra.ceyntraRestAPI.model.LoginStateModel;
-import com.ceyntra.ceyntraRestAPI.model.UserModel;
+import com.ceyntra.ceyntraRestAPI.model.*;
 import com.ceyntra.ceyntraRestAPI.repository.UserRepository;
 import com.ceyntra.ceyntraRestAPI.service.Encryption;
 import com.ceyntra.ceyntraRestAPI.service.LoginService;
@@ -15,12 +13,14 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @RestController
@@ -81,41 +81,74 @@ public class LoginController {
 
     @Autowired
     Encryption encryption;
-    SecretKey key = encryption.generateKey(128);
-    IvParameterSpec ivParameterSpec = encryption.generateIv();
+    IvParameterSpec  ivParameterSpec =  encryption.generateIv();
 
     String algorithm = "AES/CBC/PKCS5Padding";
 
-    @PostMapping("/encryptUserId/{userId}")
-    public String  encryptUserId(@PathVariable String userId) throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
-        String cipherText = encryption.encrypt(algorithm, userId, key, ivParameterSpec);
+    @PostMapping("/encryptDetails")
+    public String  encryptUserId(@RequestBody EncryptedDetails encryptedDetails) throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+        byte[] decodedKey = Base64.getDecoder().decode(encryptedDetails.getRandomKey());
+        SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
+        String cipherText = encryption.encrypt(algorithm, encryptedDetails.getUserId(), originalKey, ivParameterSpec);
         System.out.println(cipherText);
         return cipherText;
     }
 
-    @PostMapping("/decryptUserId/{encryptedUserId}")
-    public String  decryptUserId(@RequestBody String encryptedUserId) throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
-        String plainText = encryption.decrypt(algorithm, encryptedUserId, key, ivParameterSpec);
-        System.out.println(plainText);
-        return plainText;
+    @GetMapping("/logout/{key3}")
+    public String logout(@PathVariable String key3) throws NoSuchAlgorithmException {
+        return  null;
     }
 
-    public String  decryptUserIdFunc(String encryptedUserId) throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
-        String plainText = encryption.decrypt(algorithm, encryptedUserId, key, ivParameterSpec);
-        System.out.println(plainText);
-        return plainText;
+
+
+    public String  decryptUserIdFunc(String encryptedUserId, SecretKey key) throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+        try {
+
+
+
+            String plainText = encryption.decrypt(algorithm, encryptedUserId, key, ivParameterSpec);
+            System.out.println(plainText);
+            return plainText;
+        } catch (NoSuchPaddingException e) {
+           return e.getMessage();
+        } catch (NoSuchAlgorithmException e) {
+            return e.getMessage();
+        } catch (InvalidAlgorithmParameterException e) {
+            return e.getMessage();
+        } catch (InvalidKeyException e) {
+            return e.getMessage();
+        } catch (BadPaddingException e) {
+            return e.getMessage();
+        } catch (IllegalBlockSizeException e) {
+            return e.getMessage();
+        }
+
+
     }
 
-    @PostMapping("/checkLoginStatus/{cipherText}")
-    public LoginStateModel checkLoginStatus(@PathVariable String cipherText) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    @PostMapping("/checkLoginStatus")
+    public LoginStateModel checkLoginStatus(@RequestBody CipherTextModel cipherText) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
 
-        System.out.println(cipherText);
-        int userId = Integer.parseInt(decryptUserIdFunc(cipherText));
+        try {
 
-        List<String> userState = userRepository.checkLoginStatusOnUser(userId);
-        LoginStateModel loginStateModel = new LoginStateModel(Integer.parseInt(userState.get(0)), userId);
-        return loginStateModel;
+            byte[] decodedKey = Base64.getDecoder().decode(cipherText.getRandomKey());
+            SecretKey originalKey2 = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
+
+            System.out.println(cipherText.getCipherText());
+            int userId = Integer.parseInt(decryptUserIdFunc(cipherText.getCipherText(), originalKey2));
+            System.out.println("userId "+userId);
+
+            List<String> userState = userRepository.checkLoginStatusOnUser(userId);
+            LoginStateModel loginStateModel = new LoginStateModel(Integer.parseInt(userState.get(0)), userId);
+            return loginStateModel;
+
+        } catch (Exception e){
+
+            return new LoginStateModel();
+
+        }
+
 
     }
 
