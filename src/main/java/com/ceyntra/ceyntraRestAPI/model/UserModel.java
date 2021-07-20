@@ -82,4 +82,16 @@ public class UserModel {
     public void setIsLoggedIn(int isLoggedIn) {
         this.isLoggedIn = isLoggedIn;
     }
+
+    @Override
+    public String toString() {
+        return "UserModel{" +
+                "userID=" + userID +
+                ", email='" + email + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", userType=" + userType +
+                ", hashedPassword='" + hashedPassword + '\'' +
+                ", isLoggedIn=" + isLoggedIn +
+                '}';
+    }
 }
