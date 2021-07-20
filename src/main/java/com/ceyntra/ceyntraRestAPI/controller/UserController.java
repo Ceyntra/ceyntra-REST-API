@@ -23,5 +23,11 @@ public class UserController {
         return userRepository.findAll();
     }
 
+    @PostMapping("/usertype")
+    public int getUserType( String email){
+        return userRepository.findByEmail(email).getUserType();
+    }
+    
+
 
 }
