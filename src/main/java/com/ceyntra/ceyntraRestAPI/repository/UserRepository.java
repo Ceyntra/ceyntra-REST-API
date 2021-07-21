@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -32,4 +33,7 @@ public interface UserRepository extends JpaRepository<UserModel, Integer> {
     @Modifying
     @Query("UPDATE UserModel a SET a.isLoggedIn = :#{#isLoggedIn} WHERE a.userID = :#{#userId}")
     public int updateUserLoggedInStatus(@Param("isLoggedIn") int isLoggedIn, @Param("userId") int userId);
+
+
+    public UserModel findByEmail(@RequestBody String email);
 }
