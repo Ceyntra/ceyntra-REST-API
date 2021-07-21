@@ -16,7 +16,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -25,7 +25,7 @@ import java.util.Base64;
 import java.util.List;
 
 @RestController
-@SessionAttributes({"name"})
+
 @CrossOrigin("*")
 public class LoginController {
 

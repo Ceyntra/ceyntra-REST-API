@@ -1,10 +1,7 @@
 package com.ceyntra.ceyntraRestAPI.model;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "user")
@@ -12,6 +9,7 @@ public class UserModel {
 
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userID;
     private String email;
     private String telephone;
@@ -24,6 +22,15 @@ public class UserModel {
 
 
     public UserModel() {
+    }
+
+    public UserModel(String email, String telephone, int userType, String hashedPassword, int isLoggedIn) {
+
+        this.email = email;
+        this.telephone = telephone;
+        this.userType = userType;
+        this.hashedPassword = hashedPassword;
+        this.isLoggedIn = isLoggedIn;
     }
 
     public UserModel(String email, String telephone) {
