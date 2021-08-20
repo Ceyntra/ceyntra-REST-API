@@ -34,6 +34,11 @@ public interface UserRepository extends JpaRepository<UserModel, Integer> {
     @Query("UPDATE UserModel a SET a.isLoggedIn = :#{#isLoggedIn} WHERE a.userID = :#{#userId}")
     public int updateUserLoggedInStatus(@Param("isLoggedIn") int isLoggedIn, @Param("userId") int userId);
 
+    @Transactional
+    @Modifying
+    @Query("UPDATE UserModel a SET a.hashedPassword = :#{#hashedPassword} WHERE a.email = :#{#email}")
+    public int resetPassword(@Param("hashedPassword") String hashedPassword, @Param("email") String email);
+
 
     public UserModel findByEmail(@RequestBody String email);
 }

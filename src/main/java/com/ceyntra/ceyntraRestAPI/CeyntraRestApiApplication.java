@@ -18,9 +18,9 @@ public class CeyntraRestApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CeyntraRestApiApplication.class, args);
 	}
-	@EventListener(ApplicationReadyEvent.class)
-	public void sendMail(){
-	emailService.sendEmail("shehansandeepa82@gmail.com", "This is test email", "Password Reset email from ceyntra");
-	}
+//	@EventListener(ApplicationReadyEvent.class)
+//	public void sendMail(){
+//	emailService.sendEmail("shehansandeepa82@gmail.com", "This is test email", "Password Reset email from ceyntra");
+//	}
 
 }
