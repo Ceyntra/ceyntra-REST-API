@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 
 @Service
 public class LoginService {
@@ -21,5 +22,11 @@ public class LoginService {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public int generateSixDigitRandomNumber(){
+        Random rnd = new Random();
+        int number = rnd.nextInt(999999);
+        return number;
     }
 }

@@ -27,7 +27,7 @@ public class TravallerSignUpController {
     @PostMapping("/getUserDetails")
     public String getUserDetails(@RequestBody TravellerDetailsModel user){
         String hashedPassword = loginService.doHash(user.getPassword());
-        UserModel userDetails = new UserModel(user.getEmail(),user.getContactNumber(),2,hashedPassword,0);
+        UserModel userDetails = new UserModel(user.getEmail(),user.getContactNumber(),4,hashedPassword,0);
         UserModel x = userRepository.save(userDetails);
         int userID = userDetails.getUserID();
         try{

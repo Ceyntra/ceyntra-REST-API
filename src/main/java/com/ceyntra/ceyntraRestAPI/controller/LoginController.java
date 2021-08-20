@@ -61,8 +61,9 @@ public class LoginController {
     @PostMapping("/login")
     public String login(@RequestBody LoginModel loginModel) {
         String hashedPassword = loginService.doHash(loginModel.getPassword());
-
+        System.out.println(userRepository.findAll());
         List<String> userID = userRepository.getMatchingUserIdForCredential(loginModel.getEmail(), hashedPassword, 1);
+
         List<String> userEmail = userRepository.getMatchingUserEmail(loginModel.getEmail(), 1);
         List<String> hashedPasswordUserId = userRepository.getMatchingUserHashedPassword(hashedPassword, 1);
 

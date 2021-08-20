@@ -40,8 +40,8 @@ public class UserController {
 //    For Ceyntra-Mobile
 
     @PostMapping("/usertype")
-    public int getUserType( String email){
-
+    public int getUserType(@RequestBody String email){
+        System.out.println("Hello " + email);
         UserModel user=userRepository.findByEmail(email);
         if(user != null){
             return user.getUserType();
