@@ -6,10 +6,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tavaller")
+@Table(name = "traveller")
 public class TravellerModel {
 
     @Id
+    @Column(name = "traveller_id")
     private int userID;
     @Column(name = "first_name")
     private String firstName;

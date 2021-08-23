@@ -80,7 +80,7 @@ public class UserController {
 
     @GetMapping("/userlogout")
     public int logout(@RequestBody LoginModel loginModel) {
-
+        System.out.println("sdkjfs");
         UserModel user=userRepository.findByEmail(loginModel.getEmail());
         int response =  userRepository.updateUserLoggedInStatus(0, user.getUserID());
 
