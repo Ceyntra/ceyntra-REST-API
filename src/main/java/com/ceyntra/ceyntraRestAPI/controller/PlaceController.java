@@ -19,7 +19,10 @@ public class PlaceController {
 
     @GetMapping("/getAllPlaces")
     public List<TravellingPlaceModel> getAllPlaces(){
-    List<TravellingPlaceModel> placeModelArrayList = travellingPlaceRepository.getPlacesAndSortByRating();
+        List<TravellingPlaceModel> currentLocation = new ArrayList<>();
+        List<TravellingPlaceModel> placeModelArrayList = travellingPlaceRepository.getPlacesAndSortByRating();
+
+
     return placeModelArrayList;
     }
 }

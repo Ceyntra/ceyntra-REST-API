@@ -27,8 +27,8 @@ public class DistanceController {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .header("content-type", "application/json")
-                .header("x-rapidapi-host", apiKeyService.getRapidApiKey())
-                .header("x-rapidapi-key", "957f428eeamsh9f11a969b3b93eep10b262jsndaac87a7b734")
+                .header("x-rapidapi-host", "distance-calculator.p.rapidapi.com")
+                .header("x-rapidapi-key", apiKeyService.getRapidApiKey())
                 .method("GET", HttpRequest.BodyPublishers.noBody())
                 .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
