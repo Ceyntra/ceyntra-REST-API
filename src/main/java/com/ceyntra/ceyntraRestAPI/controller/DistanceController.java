@@ -1,6 +1,8 @@
 package com.ceyntra.ceyntraRestAPI.controller;
 
+import com.ceyntra.ceyntraRestAPI.model.RapidApiModel;
 import com.ceyntra.ceyntraRestAPI.service.ApiKeyService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +34,11 @@ public class DistanceController {
                 .method("GET", HttpRequest.BodyPublishers.noBody())
                 .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(response.body());
+
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        RapidApiModel rapidApiModel = objectMapper.readValue(response.body(), RapidApiModel.class);
+
+        System.out.println(rapidApiModel.getDistance());
     }
 }

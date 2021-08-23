@@ -1,5 +1,7 @@
 package com.ceyntra.ceyntraRestAPI.model;
 
+import org.springframework.context.annotation.Bean;
+
 public class CoordinatesModel {
     private double latitude;
     private double longitude;
