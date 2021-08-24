@@ -1,28 +1,17 @@
-package com.ceyntra.ceyntraRestAPI.entity;
+package com.ceyntra.ceyntraRestAPI.model;
 
-import com.ceyntra.ceyntraRestAPI.model.UserPlaceId;
-
-import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Table;
+import java.io.Serializable;
 
-@Entity
-@Table(name ="traveller_favourite_place")
-@IdClass(UserPlaceId.class)
-public class TravellerFavEntity {
-    @Id
+public class UserPlaceId implements Serializable {
+
+
     private int user_id;
-    @Id
     private int place_id;
 
-    public TravellerFavEntity(int user_id, int place_id) {
+    public UserPlaceId(int user_id, int place_id) {
         this.user_id = user_id;
         this.place_id = place_id;
-    }
-
-    public TravellerFavEntity() {
-
     }
 
     public int getUser_id() {
