@@ -1,11 +1,11 @@
-package com.ceyntra.ceyntraRestAPI.model;
+package com.ceyntra.ceyntraRestAPI.entity;
 
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "user")
-public class UserModel {
+public class UserEntity {
 
 
     @Id
@@ -22,10 +22,10 @@ public class UserModel {
     private int isLoggedIn;
 
 
-    public UserModel() {
+    public UserEntity() {
     }
 
-    public UserModel(String email, String telephone, int userType, String hashedPassword, int isLoggedIn) {
+    public UserEntity(String email, String telephone, int userType, String hashedPassword, int isLoggedIn) {
 
         this.email = email;
         this.telephone = telephone;
@@ -34,12 +34,12 @@ public class UserModel {
         this.isLoggedIn = isLoggedIn;
     }
 
-    public UserModel(String email, String telephone) {
+    public UserEntity(String email, String telephone) {
         this.email = email;
         this.telephone = telephone;
     }
 
-    public UserModel(String email) {
+    public UserEntity(String email) {
         this.email = email;
     }
 

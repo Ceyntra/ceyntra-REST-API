@@ -1,7 +1,10 @@
 package com.ceyntra.ceyntraRestAPI.controller;
 
 import com.ceyntra.ceyntraRestAPI.model.CoordinatesModel;
+import com.ceyntra.ceyntraRestAPI.model.TravellerFavPlaceId;
 import com.ceyntra.ceyntraRestAPI.model.TravellingPlaceModel;
+import com.ceyntra.ceyntraRestAPI.entity.TravellerFavEntity;
+import com.ceyntra.ceyntraRestAPI.repository.TravellerFavPlaceRepository;
 import com.ceyntra.ceyntraRestAPI.repository.TravellingPlaceRepository;
 import com.ceyntra.ceyntraRestAPI.service.TravellingPlaceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -19,6 +23,8 @@ public class PlaceController {
     TravellingPlaceRepository travellingPlaceRepository;
     @Autowired
     TravellingPlaceService travellingPlaceService;
+    @Autowired
+    TravellerFavPlaceRepository travellerFavPlaceRepository;
 
 
 //    @PostMapping("/getAllPlaces")
@@ -66,5 +72,16 @@ public class PlaceController {
 
 
         return currentLocationAvailablePlaces;
+    }
+
+    @PostMapping("/getMetadataInPlace")
+    public void getMetadataInPlace(@RequestBody TravellerFavPlaceId travellerFavPlaceId){
+        boolean isFavourite = false;
+        Optional<TravellerFavEntity> details = travellerFavPlaceRepository.findById(travellerFavPlaceId);
+        if(!details.isEmpty()){
+            isFavourite = true;
+            System.out.println(details.get().getPlace_id());
+        }
+
     }
 }

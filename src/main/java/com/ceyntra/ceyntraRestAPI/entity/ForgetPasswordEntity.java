@@ -1,4 +1,4 @@
-package com.ceyntra.ceyntraRestAPI.model;
+package com.ceyntra.ceyntraRestAPI.entity;
 
 import net.bytebuddy.implementation.bind.MethodDelegationBinder;
 
@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "forget_password")
-public class ForgetPasswordModel {
+public class ForgetPasswordEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,10 +14,10 @@ public class ForgetPasswordModel {
     @Column(unique=true)
     private String email;
     private int pinNumber;
-    public ForgetPasswordModel() {
+    public ForgetPasswordEntity() {
     }
 
-    public ForgetPasswordModel(int pinNumber, String email) {
+    public ForgetPasswordEntity(int pinNumber, String email) {
         this.pinNumber = pinNumber;
         this.email = email;
     }

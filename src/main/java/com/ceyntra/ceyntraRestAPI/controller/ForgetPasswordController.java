@@ -1,9 +1,7 @@
 package com.ceyntra.ceyntraRestAPI.controller;
 
-import com.ceyntra.ceyntraRestAPI.model.ForgetPasswordModel;
-import com.ceyntra.ceyntraRestAPI.model.LoginModel;
+import com.ceyntra.ceyntraRestAPI.entity.ForgetPasswordEntity;
 import com.ceyntra.ceyntraRestAPI.model.ResetPasswordModel;
-import com.ceyntra.ceyntraRestAPI.model.UserModel;
 import com.ceyntra.ceyntraRestAPI.repository.ForgetPasswordRepository;
 import com.ceyntra.ceyntraRestAPI.repository.UserRepository;
 import com.ceyntra.ceyntraRestAPI.service.EmailService;
@@ -11,13 +9,11 @@ import com.ceyntra.ceyntraRestAPI.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,25 +35,25 @@ public class ForgetPasswordController {
 
 
     @PostMapping("/sendAdminPasswordResetPin")
-    public ResponseEntity<ForgetPasswordModel> sendAdminPasswordResetPin(@RequestBody ForgetPasswordModel forgetPasswordModel){
+    public ResponseEntity<ForgetPasswordEntity> sendAdminPasswordResetPin(@RequestBody ForgetPasswordEntity forgetPasswordEntity){
         int pin = loginService.generateSixDigitRandomNumber();
-        ForgetPasswordModel model = new ForgetPasswordModel();
+        ForgetPasswordEntity model = new ForgetPasswordEntity();
         System.out.println(pin);
-        forgetPasswordModel.setPinNumber(pin);
-        List<String> list2 = forgetPasswordRepository.findByEmail(forgetPasswordModel.getEmail());
+        forgetPasswordEntity.setPinNumber(pin);
+        List<String> list2 = forgetPasswordRepository.findByEmail(forgetPasswordEntity.getEmail());
         if(!list2.isEmpty()){
             System.out.println("i am now in update box");
-            forgetPasswordRepository.updatePin(forgetPasswordModel.getEmail(), pin);
+            forgetPasswordRepository.updatePin(forgetPasswordEntity.getEmail(), pin);
         }
         else{
             System.out.println("i am in save box");
-            model = forgetPasswordRepository.save(forgetPasswordModel);
+            model = forgetPasswordRepository.save(forgetPasswordEntity);
         }
 
         String body = "Ceyntra admin account Password reset PIN : " + pin ;
-        emailService.sendEmail(forgetPasswordModel.getEmail(), body, "Reset Pin Ceyntra Admin");
+        emailService.sendEmail(forgetPasswordEntity.getEmail(), body, "Reset Pin Ceyntra Admin");
 
-        if(forgetPasswordModel.getEmail().isEmpty()){
+        if(forgetPasswordEntity.getEmail().isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(model);
         }
 

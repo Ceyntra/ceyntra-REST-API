@@ -1,12 +1,12 @@
 package com.ceyntra.ceyntraRestAPI.controller;
 
+import com.ceyntra.ceyntraRestAPI.entity.UserEntity;
 import com.ceyntra.ceyntraRestAPI.model.*;
 import com.ceyntra.ceyntraRestAPI.repository.UserRepository;
 import com.ceyntra.ceyntraRestAPI.service.Encryption;
 import com.ceyntra.ceyntraRestAPI.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.crypto.BadPaddingException;
@@ -14,14 +14,10 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-import javax.servlet.http.HttpServletRequest;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 @RestController
@@ -51,9 +47,9 @@ public class LoginController {
 
     //   function for get user email by user Id
     @GetMapping("/getUser/{id}")
-    public UserModel getUserDetailsById(@PathVariable int id) {
-        UserModel user1 = userRepository.findById(id).get();
-        return new UserModel(user1.getEmail(), user1.getTelephone());
+    public UserEntity getUserDetailsById(@PathVariable int id) {
+        UserEntity user1 = userRepository.findById(id).get();
+        return new UserEntity(user1.getEmail(), user1.getTelephone());
     }
 
     //  login function, validate password and user name , after validation send userID to the front end and
@@ -69,7 +65,7 @@ public class LoginController {
 
     //  check if there is matching user
         if (!userID.isEmpty() && userID.size() == 1) {
-            UserModel user1 = userRepository.findById(Integer.parseInt(userID.get(0))).get();
+            UserEntity user1 = userRepository.findById(Integer.parseInt(userID.get(0))).get();
             userRepository.updateUserLoggedInStatus(1, Integer.parseInt(userID.get(0)));
             return userID.get(0);
         } else if (userID.isEmpty()) {

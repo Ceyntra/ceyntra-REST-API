@@ -1,4 +1,4 @@
-package com.ceyntra.ceyntraRestAPI.model;
+package com.ceyntra.ceyntraRestAPI.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,7 +7,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "traveller")
-public class TravellerModel {
+public class TravellerEntity {
 
     @Id
     @Column(name = "traveller_id")
@@ -18,10 +18,10 @@ public class TravellerModel {
     private String lastName;
     private  String nic;
 
-    public TravellerModel() {
+    public TravellerEntity() {
     }
 
-    public TravellerModel(int userID, String firstName, String lastName, String nic) {
+    public TravellerEntity(int userID, String firstName, String lastName, String nic) {
         this.userID = userID;
         this.firstName = firstName;
         this.lastName = lastName;
