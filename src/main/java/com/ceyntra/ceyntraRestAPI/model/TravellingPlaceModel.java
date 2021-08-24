@@ -16,11 +16,12 @@ public class TravellingPlaceModel {
     private double rating;
     private int number_of_votes;
     private String photo;
+    private int is_accepted;
 
     public TravellingPlaceModel() {
     }
 
-    public TravellingPlaceModel(int place_id, String place_name, String description, double latitude, double longitude, int place_added_user_id, double rating, int number_of_votes, String photo) {
+    public TravellingPlaceModel(int place_id, String place_name, String description, double latitude, double longitude, int place_added_user_id, double rating, int number_of_votes, String photo,int is_accepted) {
         this.place_id = place_id;
         this.place_name = place_name;
         this.description = description;
@@ -30,6 +31,7 @@ public class TravellingPlaceModel {
         this.rating = rating;
         this.number_of_votes = number_of_votes;
         this.photo = photo;
+        this.is_accepted = is_accepted;
     }
 
     public int getPlace_id() {
@@ -102,5 +104,13 @@ public class TravellingPlaceModel {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    public int getIs_accepted() {
+        return is_accepted;
+    }
+
+    public void setIs_accepted(int is_accepted) {
+        this.is_accepted = is_accepted;
     }
 }

@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface TravellingPlaceRepository extends JpaRepository<TravellingPlaceModel, Integer> {
 
-    @Query("SELECT a from TravellingPlaceModel a order by a.rating desc ")
+    @Query("SELECT a from TravellingPlaceModel a where a.is_accepted = 1 order by a.rating desc ")
     public List<TravellingPlaceModel> getPlacesAndSortByRating();
 }
