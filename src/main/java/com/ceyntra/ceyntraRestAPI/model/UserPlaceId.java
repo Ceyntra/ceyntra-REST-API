@@ -14,6 +14,9 @@ public class UserPlaceId implements Serializable {
         this.place_id = place_id;
     }
 
+    public UserPlaceId() {
+    }
+
     public int getUser_id() {
         return user_id;
     }

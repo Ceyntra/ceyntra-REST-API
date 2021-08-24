@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface PlaceReviewRepository extends JpaRepository<PlaceReviewEntity, UserPlaceId> {
 
-    @Query("SELECT a from PlaceReviewEntity a where a.traveller_id = :userId and a.place_id = :placeId order by a.timestamp")
+    @Query("SELECT a from PlaceReviewEntity a where a.user_id = :userId and a.place_id = :placeId ")
     public List<PlaceReviewEntity> getAllReviews(@Param("userId") int userId, @Param("placeId") int placeId);
 }

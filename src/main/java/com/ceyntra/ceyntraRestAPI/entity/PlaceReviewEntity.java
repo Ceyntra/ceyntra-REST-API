@@ -2,30 +2,29 @@ package com.ceyntra.ceyntraRestAPI.entity;
 
 import com.ceyntra.ceyntraRestAPI.model.UserPlaceId;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name="place_review")
+@Table(name="traveller_rating_to_place")
 @IdClass(UserPlaceId.class)
 public class PlaceReviewEntity {
     @Id
-    private int traveller_id;
+    @Column(name = "traveller_id")
+    private int user_id;
     @Id
     private int place_id;
     private String comment;
     private double rating;
     private Timestamp timestamp;
 
-    public int getTraveller_id() {
-        return traveller_id;
+
+    public int getUser_id() {
+        return user_id;
     }
 
-    public void setTraveller_id(int traveller_id) {
-        this.traveller_id = traveller_id;
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
     }
 
     public int getPlace_id() {

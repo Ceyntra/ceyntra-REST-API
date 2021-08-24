@@ -1,13 +1,13 @@
 package com.ceyntra.ceyntraRestAPI.controller;
 
 import com.ceyntra.ceyntraRestAPI.entity.PlaceReviewEntity;
-import com.ceyntra.ceyntraRestAPI.model.CoordinatesModel;
-import com.ceyntra.ceyntraRestAPI.model.UserPlaceId;
-import com.ceyntra.ceyntraRestAPI.model.TravellingPlaceModel;
+import com.ceyntra.ceyntraRestAPI.entity.UserEntity;
+import com.ceyntra.ceyntraRestAPI.model.*;
 import com.ceyntra.ceyntraRestAPI.entity.TravellerFavEntity;
 import com.ceyntra.ceyntraRestAPI.repository.PlaceReviewRepository;
 import com.ceyntra.ceyntraRestAPI.repository.TravellerFavPlaceRepository;
 import com.ceyntra.ceyntraRestAPI.repository.TravellingPlaceRepository;
+import com.ceyntra.ceyntraRestAPI.repository.UserRepository;
 import com.ceyntra.ceyntraRestAPI.service.TravellingPlaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +30,8 @@ public class PlaceController {
     TravellerFavPlaceRepository travellerFavPlaceRepository;
     @Autowired
     PlaceReviewRepository placeReviewRepository;
+    @Autowired
+    UserRepository userRepository;
 
 
 //    @PostMapping("/getAllPlaces")
@@ -80,28 +82,36 @@ public class PlaceController {
     }
 
     @PostMapping("/getMetadataInPlace")
-    public void getMetadataInPlace(@RequestBody UserPlaceId userPlaceId){
+    public GetMetaDataPlaceModel getMetadataInPlace(@RequestBody UserPlaceId userPlaceId){
         boolean isFavourite = false;
         List<PlaceReviewEntity> reviews = new ArrayList<PlaceReviewEntity>();
-
+        List<UserAndReviewModel> userAndReviewModels = new ArrayList<>();
 
         Optional<TravellerFavEntity> details = travellerFavPlaceRepository.findById(userPlaceId);
         List<PlaceReviewEntity> allReviews = placeReviewRepository.getAllReviews(userPlaceId.getUser_id(), userPlaceId.getPlace_id());
-        if(allReviews.size() > 20)
-        {
-            reviews = allReviews.subList(0,19);
-        }
-        else if(allReviews.size() == 0){
-            reviews = new ArrayList<PlaceReviewEntity>();
-        }
-        else {
-            reviews = allReviews;
+
+        if(allReviews.size() != 0){
+            if(allReviews.size() > 20){
+                reviews = allReviews.subList(0,19);
+            }
+            else{
+                reviews = allReviews;
+            }
+
+            for(int i=0; i< reviews.size();i++){
+
+                UserEntity userDetails = userRepository.findById(reviews.get(i).getUser_id()).get();
+                userAndReviewModels.add(new UserAndReviewModel(reviews.get(i), userDetails));
+
+            }
         }
 
+// user favourite
         if(!details.isEmpty()){
             isFavourite = true;
-            System.out.println(details.get().getPlace_id());
         }
 
+        GetMetaDataPlaceModel metaData = new GetMetaDataPlaceModel(isFavourite, userAndReviewModels);
+         return metaData;
     }
 }
