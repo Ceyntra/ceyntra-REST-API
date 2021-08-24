@@ -1,13 +1,11 @@
 package com.ceyntra.ceyntraRestAPI.controller;
 
 import com.ceyntra.ceyntraRestAPI.entity.PlaceReviewEntity;
+import com.ceyntra.ceyntraRestAPI.entity.TravellerEntity;
 import com.ceyntra.ceyntraRestAPI.entity.UserEntity;
 import com.ceyntra.ceyntraRestAPI.model.*;
 import com.ceyntra.ceyntraRestAPI.entity.TravellerFavEntity;
-import com.ceyntra.ceyntraRestAPI.repository.PlaceReviewRepository;
-import com.ceyntra.ceyntraRestAPI.repository.TravellerFavPlaceRepository;
-import com.ceyntra.ceyntraRestAPI.repository.TravellingPlaceRepository;
-import com.ceyntra.ceyntraRestAPI.repository.UserRepository;
+import com.ceyntra.ceyntraRestAPI.repository.*;
 import com.ceyntra.ceyntraRestAPI.service.TravellingPlaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +30,8 @@ public class PlaceController {
     PlaceReviewRepository placeReviewRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    TravellerRepository travellerRepository;
 
 
 //    @PostMapping("/getAllPlaces")
@@ -100,7 +100,7 @@ public class PlaceController {
 
             for(int i=0; i< reviews.size();i++){
 
-                UserEntity userDetails = userRepository.findById(reviews.get(i).getUser_id()).get();
+                TravellerEntity userDetails = travellerRepository.findById(reviews.get(i).getUser_id()).get();
                 userAndReviewModels.add(new UserAndReviewModel(reviews.get(i), userDetails));
 
             }
