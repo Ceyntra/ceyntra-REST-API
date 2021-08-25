@@ -17,6 +17,15 @@ public class PlaceRatingEntity {
     private int place_id;
     private double rating;
 
+    public PlaceRatingEntity(int user_id, int place_id, double rating) {
+        this.user_id = user_id;
+        this.place_id = place_id;
+        this.rating = rating;
+    }
+
+    public PlaceRatingEntity() {
+    }
+
     public int getUser_id() {
         return user_id;
     }

@@ -132,4 +132,23 @@ public class PlaceController {
             travellerFavPlaceRepository.deleteById(new UserPlaceId(model.getUserId(), model.getPlaceId()));
         }
     }
+
+    @PostMapping("/addReview")
+    public int addReviewAndUpdateRating(@RequestBody AddReviewModel addReviewModel){
+        System.out.println(addReviewModel.getComment() + addReviewModel.getRating());
+        PlaceReviewEntity reviewEntity = placeReviewRepository.save(new PlaceReviewEntity(addReviewModel.getUserId(), addReviewModel.getPlaceId(), addReviewModel.getComment()));
+        if(reviewEntity.getComment() != null){
+          Optional<PlaceRatingEntity> ratingEntity =  placeRatingRepository.findById(new UserPlaceId(addReviewModel.getUserId(), addReviewModel.getPlaceId()));
+          if(ratingEntity.isPresent()){
+              placeRatingRepository.updateRating(addReviewModel.getRating(), addReviewModel.getUserId(), addReviewModel.getPlaceId());
+          } else{
+              placeRatingRepository.save(new PlaceRatingEntity(addReviewModel.getUserId(), addReviewModel.getPlaceId(), addReviewModel.getRating()));
+          }
+
+          return 1;
+        }
+        return 0;
+    }
+
+
 }
