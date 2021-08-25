@@ -118,4 +118,18 @@ public class PlaceController {
         GetMetaDataPlaceModel metaData = new GetMetaDataPlaceModel(isFavourite,myRating, userAndReviewModels );
          return metaData;
     }
+
+    @PostMapping("/updateFavouritePlace")
+    public void updateFavouritePlace(@RequestBody FavouritePlaceUpdateModel model){
+
+
+        if(model.isFavouriteStatus()){
+            System.out.println("saved");
+            travellerFavPlaceRepository.save(new TravellerFavEntity(model.getUserId(), model.getPlaceId()));
+        }
+        else{
+            System.out.println("deleted");
+            travellerFavPlaceRepository.deleteById(new UserPlaceId(model.getUserId(), model.getPlaceId()));
+        }
+    }
 }
