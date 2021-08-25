@@ -1,10 +1,7 @@
 package com.ceyntra.ceyntraRestAPI.controller;
 
-import com.ceyntra.ceyntraRestAPI.entity.PlaceReviewEntity;
-import com.ceyntra.ceyntraRestAPI.entity.TravellerEntity;
-import com.ceyntra.ceyntraRestAPI.entity.UserEntity;
+import com.ceyntra.ceyntraRestAPI.entity.*;
 import com.ceyntra.ceyntraRestAPI.model.*;
-import com.ceyntra.ceyntraRestAPI.entity.TravellerFavEntity;
 import com.ceyntra.ceyntraRestAPI.repository.*;
 import com.ceyntra.ceyntraRestAPI.service.TravellingPlaceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +29,8 @@ public class PlaceController {
     UserRepository userRepository;
     @Autowired
     TravellerRepository travellerRepository;
+    @Autowired
+    PlaceRatingRepository placeRatingRepository;
 
 
 //    @PostMapping("/getAllPlaces")
@@ -84,24 +83,29 @@ public class PlaceController {
     @PostMapping("/getMetadataInPlace")
     public GetMetaDataPlaceModel getMetadataInPlace(@RequestBody UserPlaceId userPlaceId){
         boolean isFavourite = false;
+        double myRating = 0.0;
         List<PlaceReviewEntity> reviews = new ArrayList<PlaceReviewEntity>();
         List<UserAndReviewModel> userAndReviewModels = new ArrayList<>();
 
         Optional<TravellerFavEntity> details = travellerFavPlaceRepository.findById(userPlaceId);
-        List<PlaceReviewEntity> allReviews = placeReviewRepository.getAllReviews(userPlaceId.getUser_id(), userPlaceId.getPlace_id());
+        List<PlaceReviewEntity> allReviews = placeReviewRepository.getAllReviews(userPlaceId.getPlace_id());
+        Optional<PlaceRatingEntity> placeRatingEntity = placeRatingRepository.findById(userPlaceId);
+
+        if(placeRatingEntity.isPresent()){
+            myRating = placeRatingEntity.get().getRating();
+        }
 
         if(allReviews.size() != 0){
-            if(allReviews.size() > 20){
-                reviews = allReviews.subList(0,19);
-            }
-            else{
+
+
                 reviews = allReviews;
-            }
+
 
             for(int i=0; i< reviews.size();i++){
 
                 TravellerEntity userDetails = travellerRepository.findById(reviews.get(i).getUser_id()).get();
-                userAndReviewModels.add(new UserAndReviewModel(reviews.get(i), userDetails));
+                PlaceRatingEntity ratingDetails = placeRatingRepository.findById(new UserPlaceId(reviews.get(i).getUser_id(), userPlaceId.getPlace_id())).get();
+                userAndReviewModels.add(new UserAndReviewModel(reviews.get(i), userDetails, ratingDetails.getRating()));
 
             }
         }
@@ -111,7 +115,7 @@ public class PlaceController {
             isFavourite = true;
         }
 
-        GetMetaDataPlaceModel metaData = new GetMetaDataPlaceModel(isFavourite, userAndReviewModels);
+        GetMetaDataPlaceModel metaData = new GetMetaDataPlaceModel(isFavourite,myRating, userAndReviewModels );
          return metaData;
     }
 }

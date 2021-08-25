@@ -8,8 +8,8 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface PlaceReviewRepository extends JpaRepository<PlaceReviewEntity, UserPlaceId> {
+public interface PlaceReviewRepository extends JpaRepository<PlaceReviewEntity, Integer> {
 
-    @Query("SELECT a from PlaceReviewEntity a where a.user_id = :userId and a.place_id = :placeId ")
-    public List<PlaceReviewEntity> getAllReviews(@Param("userId") int userId, @Param("placeId") int placeId);
+    @Query("SELECT a from PlaceReviewEntity a where  a.place_id = :placeId order by a.timestamp desc ")
+    public List<PlaceReviewEntity> getAllReviews( @Param("placeId") int placeId);
 }

@@ -17,8 +17,17 @@ public class TravellerEntity {
     @Column(name = "last_name")
     private String lastName;
     private  String nic;
+    private String profile_photo;
 
     public TravellerEntity() {
+    }
+
+    public TravellerEntity(int userID, String firstName, String lastName, String nic, String profile_photo) {
+        this.userID = userID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.nic = nic;
+        this.profile_photo = profile_photo;
     }
 
     public TravellerEntity(int userID, String firstName, String lastName, String nic) {
@@ -26,6 +35,14 @@ public class TravellerEntity {
         this.firstName = firstName;
         this.lastName = lastName;
         this.nic = nic;
+    }
+
+    public String getPhoto() {
+        return profile_photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.profile_photo = photo;
     }
 
     public int getUserID() {

@@ -6,16 +6,15 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name="traveller_rating_to_place")
-@IdClass(UserPlaceId.class)
+@Table(name="traveller_review_to_place")
+
 public class PlaceReviewEntity {
     @Id
+    private int review_id;
     @Column(name = "traveller_id")
     private int user_id;
-    @Id
     private int place_id;
     private String comment;
-    private double rating;
     private Timestamp timestamp;
 
 
@@ -41,14 +40,6 @@ public class PlaceReviewEntity {
 
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-    public double getRating() {
-        return rating;
-    }
-
-    public void setRating(double rating) {
-        this.rating = rating;
     }
 
     public Timestamp getTimestamp() {
