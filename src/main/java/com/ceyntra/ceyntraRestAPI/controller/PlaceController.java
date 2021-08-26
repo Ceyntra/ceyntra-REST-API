@@ -176,5 +176,12 @@ public class PlaceController {
         return 0;
     }
 
+    @GetMapping("/getTopPlacePhotos/{id}")
+    public List<String> getTopPlacePhotos(@PathVariable("id") int id){
+        List<String> photoList = placePhotoRepository.getAllPhotosOfPlace(id);
+
+        return photoList;
+    }
+
 
 }
