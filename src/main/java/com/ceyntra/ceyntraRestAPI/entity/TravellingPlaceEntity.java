@@ -1,10 +1,10 @@
-package com.ceyntra.ceyntraRestAPI.model;
+package com.ceyntra.ceyntraRestAPI.entity;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "travelling_place")
-public class TravellingPlaceModel {
+public class TravellingPlaceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int place_id;
@@ -18,10 +18,10 @@ public class TravellingPlaceModel {
     private String photo;
     private int is_accepted;
 
-    public TravellingPlaceModel() {
+    public TravellingPlaceEntity() {
     }
 
-    public TravellingPlaceModel(int place_id, String place_name, String description, double latitude, double longitude, int place_added_user_id, double rating, int number_of_votes, String photo,int is_accepted) {
+    public TravellingPlaceEntity(int place_id, String place_name, String description, double latitude, double longitude, int place_added_user_id, double rating, int number_of_votes, String photo, int is_accepted) {
         this.place_id = place_id;
         this.place_name = place_name;
         this.description = description;

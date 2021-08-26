@@ -8,22 +8,54 @@ public class GetMetaDataPlaceModel {
     private boolean isFavourite;
     private double myRating;
     private List<UserAndReviewModel> list;
+    private int numOfVotesForPlace;
+    private double placeRating;
 
-    public GetMetaDataPlaceModel(boolean isFavourite, double myRating, List<UserAndReviewModel> list) {
+    public GetMetaDataPlaceModel(boolean isFavourite, double myRating, List<UserAndReviewModel> list, int numOfVotesForPlace, double placeRating) {
         this.isFavourite = isFavourite;
         this.myRating = myRating;
         this.list = list;
-    }
-
-    public double getMyRating() {
-        return myRating;
+        this.numOfVotesForPlace = numOfVotesForPlace;
+        this.placeRating = placeRating;
     }
 
     public boolean isFavourite() {
         return isFavourite;
     }
 
+    public void setFavourite(boolean favourite) {
+        isFavourite = favourite;
+    }
+
+    public double getMyRating() {
+        return myRating;
+    }
+
+    public void setMyRating(double myRating) {
+        this.myRating = myRating;
+    }
+
     public List<UserAndReviewModel> getList() {
         return list;
+    }
+
+    public void setList(List<UserAndReviewModel> list) {
+        this.list = list;
+    }
+
+    public int getNumOfVotesForPlace() {
+        return numOfVotesForPlace;
+    }
+
+    public void setNumOfVotesForPlace(int numOfVotesForPlace) {
+        this.numOfVotesForPlace = numOfVotesForPlace;
+    }
+
+    public double getPlaceRating() {
+        return placeRating;
+    }
+
+    public void setPlaceRating(double placeRating) {
+        this.placeRating = placeRating;
     }
 }

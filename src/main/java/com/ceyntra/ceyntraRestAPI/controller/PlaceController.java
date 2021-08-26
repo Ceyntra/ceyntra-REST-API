@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,9 +59,9 @@ public class PlaceController {
 
 //    dont delete upper commented function, this is dummy function and upper commented function is the real function with API.
     @PostMapping("/getAllPlaces")
-    public List<TravellingPlaceModel> getAllPlaces(@RequestBody CoordinatesModel currentPlaceCoordinates) throws IOException, InterruptedException {
-        List<TravellingPlaceModel> currentLocationAvailablePlaces = new ArrayList<>();
-        List<TravellingPlaceModel> placeModelList = travellingPlaceRepository.getPlacesAndSortByRating();
+    public List<TravellingPlaceEntity> getAllPlaces(@RequestBody CoordinatesModel currentPlaceCoordinates) throws IOException, InterruptedException {
+        List<TravellingPlaceEntity> currentLocationAvailablePlaces = new ArrayList<>();
+        List<TravellingPlaceEntity> placeModelList = travellingPlaceRepository.getPlacesAndSortByRating();
         int distance = 0;
 
         CoordinatesModel anotherPlaceCoordinates = new CoordinatesModel();
@@ -84,6 +83,8 @@ public class PlaceController {
     public GetMetaDataPlaceModel getMetadataInPlace(@RequestBody UserPlaceId userPlaceId){
         boolean isFavourite = false;
         double myRating = 0.0;
+        double placeRating = 0.0;
+        int numOfVotesForPlace = 0;
         List<PlaceReviewEntity> reviews = new ArrayList<PlaceReviewEntity>();
         List<UserAndReviewModel> userAndReviewModels = new ArrayList<>();
 
@@ -110,12 +111,27 @@ public class PlaceController {
             }
         }
 
+
+//        calculate place overall rating
+        List<PlaceRatingEntity> ratingEntityList = placeRatingRepository.gePlaceRatingByPlaceId(userPlaceId.getPlace_id());
+        if(!ratingEntityList.isEmpty()){
+            double sum = 0;
+            numOfVotesForPlace = ratingEntityList.size();
+            for (int i =0; i<ratingEntityList.size(); i++){
+                sum = sum + ratingEntityList.get(i).getRating();
+            }
+
+            placeRating = sum/ratingEntityList.size();
+
+
+        }
+
 // user favourite
         if(!details.isEmpty()){
             isFavourite = true;
         }
 
-        GetMetaDataPlaceModel metaData = new GetMetaDataPlaceModel(isFavourite,myRating, userAndReviewModels );
+        GetMetaDataPlaceModel metaData = new GetMetaDataPlaceModel(isFavourite,myRating, userAndReviewModels, numOfVotesForPlace, placeRating );
          return metaData;
     }
 
