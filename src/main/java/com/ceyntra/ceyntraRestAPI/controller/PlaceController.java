@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -151,8 +153,10 @@ public class PlaceController {
 
     @PostMapping("/addReview")
     public int addReviewAndUpdateRating(@RequestBody AddReviewModel addReviewModel){
+        Date date = new Date();
+        Timestamp timestamp = new Timestamp(date.getTime());
         System.out.println(addReviewModel.getComment() + addReviewModel.getRating());
-        PlaceReviewEntity reviewEntity = placeReviewRepository.save(new PlaceReviewEntity(addReviewModel.getUserId(), addReviewModel.getPlaceId(), addReviewModel.getComment()));
+        PlaceReviewEntity reviewEntity = placeReviewRepository.save(new PlaceReviewEntity(addReviewModel.getUserId(), addReviewModel.getPlaceId(), addReviewModel.getComment(), timestamp));
         if(reviewEntity.getComment() != null){
           Optional<PlaceRatingEntity> ratingEntity =  placeRatingRepository.findById(new UserPlaceId(addReviewModel.getUserId(), addReviewModel.getPlaceId()));
           if(ratingEntity.isPresent()){

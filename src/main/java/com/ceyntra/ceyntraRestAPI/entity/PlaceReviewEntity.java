@@ -17,10 +17,11 @@ public class PlaceReviewEntity {
     private String comment;
     private Timestamp timestamp;
 
-    public PlaceReviewEntity(int user_id, int place_id, String comment) {
+    public PlaceReviewEntity(int user_id, int place_id, String comment, Timestamp timestamp) {
         this.user_id = user_id;
         this.place_id = place_id;
         this.comment = comment;
+        this.timestamp = timestamp;
 
     }
 
