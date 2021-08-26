@@ -10,13 +10,23 @@ public class GetMetaDataPlaceModel {
     private List<UserAndReviewModel> list;
     private int numOfVotesForPlace;
     private double placeRating;
+    private List<String> photoList;
 
-    public GetMetaDataPlaceModel(boolean isFavourite, double myRating, List<UserAndReviewModel> list, int numOfVotesForPlace, double placeRating) {
+    public GetMetaDataPlaceModel(boolean isFavourite, double myRating, List<UserAndReviewModel> list, int numOfVotesForPlace, double placeRating, List<String> photoList) {
         this.isFavourite = isFavourite;
         this.myRating = myRating;
         this.list = list;
         this.numOfVotesForPlace = numOfVotesForPlace;
         this.placeRating = placeRating;
+        this.photoList = photoList;
+    }
+
+    public List<String> getPhotoList() {
+        return photoList;
+    }
+
+    public void setPhotoList(List<String> photoList) {
+        this.photoList = photoList;
     }
 
     public boolean isFavourite() {

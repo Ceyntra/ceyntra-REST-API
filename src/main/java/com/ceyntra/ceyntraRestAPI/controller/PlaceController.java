@@ -32,6 +32,8 @@ public class PlaceController {
     TravellerRepository travellerRepository;
     @Autowired
     PlaceRatingRepository placeRatingRepository;
+    @Autowired
+    PlacePhotoRepository placePhotoRepository;
 
 
 //    @PostMapping("/getAllPlaces")
@@ -90,9 +92,13 @@ public class PlaceController {
         List<PlaceReviewEntity> reviews = new ArrayList<PlaceReviewEntity>();
         List<UserAndReviewModel> userAndReviewModels = new ArrayList<>();
 
+
         Optional<TravellerFavEntity> details = travellerFavPlaceRepository.findById(userPlaceId);
         List<PlaceReviewEntity> allReviews = placeReviewRepository.getAllReviews(userPlaceId.getPlace_id());
         Optional<PlaceRatingEntity> placeRatingEntity = placeRatingRepository.findById(userPlaceId);
+        List<String> placePhotoEntityList = placePhotoRepository.getAllPhotosOfPlace(userPlaceId.getPlace_id());
+
+
 
         if(placeRatingEntity.isPresent()){
             myRating = placeRatingEntity.get().getRating();
@@ -133,7 +139,7 @@ public class PlaceController {
             isFavourite = true;
         }
 
-        GetMetaDataPlaceModel metaData = new GetMetaDataPlaceModel(isFavourite,myRating, userAndReviewModels, numOfVotesForPlace, placeRating );
+        GetMetaDataPlaceModel metaData = new GetMetaDataPlaceModel(isFavourite,myRating, userAndReviewModels, numOfVotesForPlace, placeRating , placePhotoEntityList);
          return metaData;
     }
 
