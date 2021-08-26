@@ -123,7 +123,7 @@ public class PlaceController {
 
             placeRating = sum/ratingEntityList.size();
 
-
+            travellingPlaceRepository.updateRatingAndVotes(placeRating, numOfVotesForPlace, userPlaceId.getPlace_id());
         }
 
 // user favourite
