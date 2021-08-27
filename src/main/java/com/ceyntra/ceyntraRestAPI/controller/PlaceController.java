@@ -36,7 +36,7 @@ public class PlaceController {
     PlacePhotoRepository placePhotoRepository;
 
 
-//    @PostMapping("/getAllPlaces")
+//    @PostMapping("/getAllPlacesForLocation")
 //    public List<TravellingPlaceModel> getAllPlaces(@RequestBody CoordinatesModel currentPlaceCoordinates) throws IOException, InterruptedException {
 //        List<TravellingPlaceModel> currentLocationAvailablePlaces = new ArrayList<>();
 //        List<TravellingPlaceModel> placeModelList = travellingPlaceRepository.getPlacesAndSortByRating();
@@ -66,7 +66,7 @@ public class PlaceController {
     public List<TravellingPlaceEntity> getAllPlaces(@RequestBody CoordinatesModel currentPlaceCoordinates) throws IOException, InterruptedException {
         List<TravellingPlaceEntity> currentLocationAvailablePlaces = new ArrayList<>();
         List<TravellingPlaceEntity> placeModelList = travellingPlaceRepository.getPlacesAndSortByRating();
-        int distance = 0;
+
 
         CoordinatesModel anotherPlaceCoordinates = new CoordinatesModel();
 
@@ -82,6 +82,9 @@ public class PlaceController {
 
         return currentLocationAvailablePlaces;
     }
+
+
+
 
     @PostMapping("/getMetadataInPlace")
     public GetMetaDataPlaceModel getMetadataInPlace(@RequestBody UserPlaceId userPlaceId){
