@@ -96,17 +96,18 @@ public class PlaceController {
         List<UserAndReviewModel> userAndReviewModels = new ArrayList<>();
 
 
-        Optional<TravellerFavEntity> details = travellerFavPlaceRepository.findById(userPlaceId);
+        Optional<TravellerFavPlaceEntity> details = travellerFavPlaceRepository.findById(userPlaceId);
         List<PlaceReviewEntity> allReviews = placeReviewRepository.getAllReviews(userPlaceId.getPlace_id());
         Optional<PlaceRatingEntity> placeRatingEntity = placeRatingRepository.findById(userPlaceId);
         List<String> placePhotoEntityList = placePhotoRepository.getAllPhotosOfPlace(userPlaceId.getPlace_id());
 
 
-
+//setup myRatings
         if(placeRatingEntity.isPresent()){
             myRating = placeRatingEntity.get().getRating();
         }
 
+//        setup reviews
         if(allReviews.size() != 0){
 
 
@@ -152,7 +153,7 @@ public class PlaceController {
 
         if(model.isFavouriteStatus()){
             System.out.println("saved");
-            travellerFavPlaceRepository.save(new TravellerFavEntity(model.getUserId(), model.getPlaceId()));
+            travellerFavPlaceRepository.save(new TravellerFavPlaceEntity(model.getUserId(), model.getPlaceId()));
         }
         else{
             System.out.println("deleted");
