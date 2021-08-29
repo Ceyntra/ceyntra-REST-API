@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*")
-public class TaxiDriverController {
+public class SpController {
 
 
     @Autowired
@@ -37,6 +37,7 @@ public class TaxiDriverController {
     SpRatingRepository spRatingRepository;
     @Autowired
     TaxiDriverRepository taxiDriverRepository;
+
 
 
 
@@ -147,4 +148,19 @@ public class TaxiDriverController {
         }
         return 0;
     }
+
+    @PostMapping("/updateFavouriteSp")
+    public void updateFavouritePlace(@RequestBody FavouritePlaceUpdateModel model){
+
+
+        if(model.isFavouriteStatus()){
+            System.out.println("saved");
+            travellerFavSpRepository.save(new TravellerFavSpEntity(model.getUserId(), model.getPlaceId()));
+        }
+        else{
+            System.out.println("deleted");
+            travellerFavSpRepository.deleteById(new TravellerSpId(model.getUserId(), model.getPlaceId()));
+        }
+    }
+
 }
