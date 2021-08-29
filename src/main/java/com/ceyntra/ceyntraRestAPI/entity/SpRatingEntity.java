@@ -16,16 +16,16 @@ public class SpRatingEntity {
     private int traveller_id;
     @Id
     private int sp_id;
-    private int sp_user_type;
+
     private double rating;
 
     public SpRatingEntity() {
     }
 
-    public SpRatingEntity(int traveller_id, int sp_id, int sp_user_type, double rating) {
+    public SpRatingEntity(int traveller_id, int sp_id, double rating) {
         this.traveller_id = traveller_id;
         this.sp_id = sp_id;
-        this.sp_user_type = sp_user_type;
+
         this.rating = rating;
     }
 
@@ -45,13 +45,7 @@ public class SpRatingEntity {
         this.sp_id = sp_id;
     }
 
-    public int getSp_user_type() {
-        return sp_user_type;
-    }
 
-    public void setSp_user_type(int sp_user_type) {
-        this.sp_user_type = sp_user_type;
-    }
 
     public double getRating() {
         return rating;

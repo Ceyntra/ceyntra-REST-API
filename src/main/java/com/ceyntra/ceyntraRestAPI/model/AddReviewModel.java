@@ -4,6 +4,7 @@ public class AddReviewModel {
     private String comment;
     private double rating;
     private int placeId;
+    private int spId;
     private int userId;
 
     public AddReviewModel() {
@@ -15,6 +16,7 @@ public class AddReviewModel {
         this.placeId = placeId;
         this.userId = userId;
     }
+
 
     public String getComment() {
         return comment;

@@ -1,13 +1,14 @@
 package com.ceyntra.ceyntraRestAPI.model;
 
-import com.ceyntra.ceyntraRestAPI.entity.PlaceReviewEntity;
-import com.ceyntra.ceyntraRestAPI.entity.TravellerEntity;
-import com.ceyntra.ceyntraRestAPI.entity.UserEntity;
+import com.ceyntra.ceyntraRestAPI.entity.*;
 
 public class UserAndReviewModel {
     private PlaceReviewEntity placeReviewEntity;
+    private SpReviewEntity spReviewEntity;
     private TravellerEntity travellerEntity;
     private double rating;
+
+
 
     public UserAndReviewModel(PlaceReviewEntity placeReviewEntity, TravellerEntity travellerEntity, double rating) {
         this.placeReviewEntity = placeReviewEntity;
@@ -15,7 +16,22 @@ public class UserAndReviewModel {
         this.rating = rating;
     }
 
+    public UserAndReviewModel( SpReviewEntity spReviewEntity, TravellerEntity travellerEntity, double rating) {
+        this.spReviewEntity = spReviewEntity;
+        this.travellerEntity = travellerEntity;
+        this.rating = rating;
+
+    }
+
     public UserAndReviewModel() {
+    }
+
+    public SpReviewEntity getSpReviewEntity() {
+        return spReviewEntity;
+    }
+
+    public void setSpReviewEntity(SpReviewEntity spReviewEntity) {
+        this.spReviewEntity = spReviewEntity;
     }
 
     public double getRating() {

@@ -12,7 +12,6 @@ public class SpReviewEntity {
     @Column(name = "traveller_id")
     private int user_id;
     private int sp_id;
-    private int sp_user_type;
     private String comment;
     private Timestamp timestamp;
 
@@ -20,11 +19,10 @@ public class SpReviewEntity {
     public SpReviewEntity() {
     }
 
-    public SpReviewEntity(int review_id, int user_id, int sp_id, int sp_user_type, String comment, Timestamp timestamp) {
-        this.review_id = review_id;
+    public SpReviewEntity(int user_id, int sp_id,  String comment, Timestamp timestamp) {
+
         this.user_id = user_id;
         this.sp_id = sp_id;
-        this.sp_user_type = sp_user_type;
         this.comment = comment;
         this.timestamp = timestamp;
     }
@@ -53,13 +51,7 @@ public class SpReviewEntity {
         this.sp_id = sp_id;
     }
 
-    public int getSp_user_type() {
-        return sp_user_type;
-    }
 
-    public void setSp_user_type(int sp_user_type) {
-        this.sp_user_type = sp_user_type;
-    }
 
     public String getComment() {
         return comment;
