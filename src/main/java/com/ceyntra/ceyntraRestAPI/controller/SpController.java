@@ -37,6 +37,11 @@ public class SpController {
     SpRatingRepository spRatingRepository;
     @Autowired
     TaxiDriverRepository taxiDriverRepository;
+    @Autowired
+    HotelPhotoRepository hotelPhotoRepository;
+
+    @Autowired
+    HotelRepository hotelRepository;
 
 
 
@@ -70,6 +75,34 @@ public class SpController {
         return allTaxiDriverList;
     }
 
+    @PostMapping("/getAllHotelsForLocation")
+    public List<HotelEntity> getAllHotels(@RequestBody CoordinatesModel currentPlaceCoordinates) throws IOException, InterruptedException {
+        List<HotelEntity> currentLocationAvailableHotels = new ArrayList<>();
+        List<HotelEntity> allHotelList = hotelRepository.getAllHotelsAndSortByRating();
+
+//        int distance = 0;
+//
+//
+//        CoordinatesModel anotherPlaceCoordinates = new CoordinatesModel();
+//
+//        for (int i = 0; i< allTaxiDriverList.size(); i++){
+//            anotherPlaceCoordinates.setLatitude(allTaxiDriverList.get(i).getWorking_latitude());
+//            anotherPlaceCoordinates.setLongitude(allTaxiDriverList.get(i).getWorking_longitude());
+//
+//            distance = travellingPlaceService.calculateDistanceBetweenTwoPlaces(currentPlaceCoordinates, anotherPlaceCoordinates);
+//
+//            if(distance < 100){
+//                currentLocationAvailableTaxis.add(allTaxiDriverList.get(i));
+//            }
+//
+//
+//
+//        }
+
+
+        return allHotelList;
+    }
+
 
 
     @PostMapping("/getMetadataInSp")
@@ -81,10 +114,12 @@ public class SpController {
         List<SpReviewEntity> reviews = new ArrayList<SpReviewEntity>();
         List<UserAndReviewModel> userAndReviewModels = new ArrayList<>();
 
+        int userType = userRepository.findById(travellerSpId.getSp_id()).get().getUserType();
 
         Optional<TravellerFavSpEntity> details = travellerFavSpRepository.findById(travellerSpId);
         List<SpReviewEntity> allReviews = spReviewRepository.getAllReviews(travellerSpId.getSp_id());
         Optional<SpRatingEntity> spRatingEntity = spRatingRepository.findById(travellerSpId);
+        List<String> hotelPhotoEntityList = hotelPhotoRepository.getAllPhotosOfHotel(travellerSpId.getSp_id());
 
 
 
@@ -117,7 +152,15 @@ public class SpController {
 
             spRating = sum/ratingEntityList.size();
             System.out.println(spRating);
-            taxiDriverRepository.updateRatingAndVotes(spRating, numOfVotesForSp, travellerSpId.getSp_id());
+
+            if(userType == 3){
+                taxiDriverRepository.updateRatingAndVotes(spRating, numOfVotesForSp, travellerSpId.getSp_id());
+            }
+            else if(userType ==2){
+                hotelRepository.updateRatingAndVotes(spRating, numOfVotesForSp, travellerSpId.getSp_id());
+            }
+
+
         }
 
 // user favourite
@@ -125,7 +168,7 @@ public class SpController {
             isFavourite = true;
         }
 
-        GetMetaDataPlaceModel metaData = new GetMetaDataPlaceModel(isFavourite,myRating, userAndReviewModels, numOfVotesForSp, spRating);
+        GetMetaDataPlaceModel metaData = new GetMetaDataPlaceModel(isFavourite,myRating, userAndReviewModels, numOfVotesForSp, spRating, hotelPhotoEntityList);
         return metaData;
     }
 
