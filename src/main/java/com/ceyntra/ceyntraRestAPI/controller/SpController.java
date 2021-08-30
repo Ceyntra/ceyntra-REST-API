@@ -39,7 +39,8 @@ public class SpController {
     TaxiDriverRepository taxiDriverRepository;
     @Autowired
     HotelPhotoRepository hotelPhotoRepository;
-
+    @Autowired
+    GuideRepository guideRepository;
     @Autowired
     HotelRepository hotelRepository;
 
@@ -103,6 +104,34 @@ public class SpController {
         return allHotelList;
     }
 
+    @PostMapping("/getAllGuidesForLocation")
+    public List<GuideEntity> getAllGuides(@RequestBody CoordinatesModel currentPlaceCoordinates) throws IOException, InterruptedException {
+        List<GuideEntity> currentLocationAvailableGuides = new ArrayList<>();
+        List<GuideEntity> allGuideList = guideRepository.getAllGuidesAndSortByRating();
+
+//        int distance = 0;
+//
+//
+//        CoordinatesModel anotherPlaceCoordinates = new CoordinatesModel();
+//
+//        for (int i = 0; i< allTaxiDriverList.size(); i++){
+//            anotherPlaceCoordinates.setLatitude(allTaxiDriverList.get(i).getWorking_latitude());
+//            anotherPlaceCoordinates.setLongitude(allTaxiDriverList.get(i).getWorking_longitude());
+//
+//            distance = travellingPlaceService.calculateDistanceBetweenTwoPlaces(currentPlaceCoordinates, anotherPlaceCoordinates);
+//
+//            if(distance < 100){
+//                currentLocationAvailableTaxis.add(allTaxiDriverList.get(i));
+//            }
+//
+//
+//
+//        }
+
+
+        return allGuideList;
+    }
+
 
 
     @PostMapping("/getMetadataInSp")
@@ -158,6 +187,9 @@ public class SpController {
             }
             else if(userType ==2){
                 hotelRepository.updateRatingAndVotes(spRating, numOfVotesForSp, travellerSpId.getSp_id());
+            }
+            else if(userType ==1){
+                guideRepository.updateRatingAndVotes(spRating, numOfVotesForSp, travellerSpId.getSp_id());
             }
 
 
