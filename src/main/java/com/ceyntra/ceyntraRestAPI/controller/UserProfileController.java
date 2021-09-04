@@ -2,14 +2,13 @@ package com.ceyntra.ceyntraRestAPI.controller;
 
 import com.ceyntra.ceyntraRestAPI.entity.TravellerEntity;
 import com.ceyntra.ceyntraRestAPI.entity.UserEntity;
+import com.ceyntra.ceyntraRestAPI.model.ProfilePhotoUpdateModel;
 import com.ceyntra.ceyntraRestAPI.model.UserAndTravellerModel;
 import com.ceyntra.ceyntraRestAPI.model.UserContactModel;
 import com.ceyntra.ceyntraRestAPI.repository.TravellerRepository;
 import com.ceyntra.ceyntraRestAPI.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,5 +31,11 @@ public class UserProfileController {
         userContactModel.setTelephone(user.get().getTelephone());
         UserAndTravellerModel details = new UserAndTravellerModel(traveller.get(), userContactModel);
         return details;
+    }
+
+    @PutMapping("/updateProfilePhoto")
+    public int updateProfilePhoto(@RequestBody ProfilePhotoUpdateModel model){
+        int result=travellerRepository.updatePhoto(model.getPhoto(), model.getUserID());
+        return result;
     }
 }
