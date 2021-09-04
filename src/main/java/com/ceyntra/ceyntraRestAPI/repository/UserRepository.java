@@ -1,6 +1,7 @@
 package com.ceyntra.ceyntraRestAPI.repository;
 
 import com.ceyntra.ceyntraRestAPI.entity.UserEntity;
+import com.ceyntra.ceyntraRestAPI.model.UserContactModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -36,6 +37,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
     @Query("UPDATE UserEntity a SET a.hashedPassword = :#{#hashedPassword} WHERE a.email = :#{#email}")
     public int resetPassword(@Param("hashedPassword") String hashedPassword, @Param("email") String email);
 
-
     public UserEntity findByEmail(@RequestBody String email);
+
+    @Query("SELECT email, telephone FROM UserEntity WHERE userID=?1")
+    public List<String> getNeedData(int id);
 }
