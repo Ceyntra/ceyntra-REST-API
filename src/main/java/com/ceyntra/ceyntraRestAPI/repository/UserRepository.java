@@ -41,4 +41,9 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 
     @Query("SELECT email, telephone FROM UserEntity WHERE userID=?1")
     public List<String> getNeedData(int id);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE UserEntity a SET a.email= :email, a.telephone= :telephone WHERE a.userID= :id")
+    public int updateContactDetails(@Param("email") String email, @Param("telephone") String telephone, @Param("id") int id);
 }

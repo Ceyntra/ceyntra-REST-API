@@ -15,4 +15,9 @@ public interface TravellerRepository extends JpaRepository<TravellerEntity, Inte
     public int updatePhoto(@Param("photo") String photo, @Param("id") int id);
 //    @Query("UPDATE TravellerEntity SET profile_photo=?1 WHERE userID=?2")
 //    public int updatePhoto(String photo, int id);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE TravellerEntity a SET a.nic= :nic, a.firstName= :fname, a.lastName= :lname WHERE a.userID= :id")
+    public int updateDetails(@Param("nic") String nic, @Param("fname") String fname, @Param("lname") String lname, @Param("id") int id);
 }
