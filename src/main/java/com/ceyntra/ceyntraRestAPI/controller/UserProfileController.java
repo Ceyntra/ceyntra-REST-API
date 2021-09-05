@@ -2,9 +2,7 @@ package com.ceyntra.ceyntraRestAPI.controller;
 
 import com.ceyntra.ceyntraRestAPI.entity.TravellerEntity;
 import com.ceyntra.ceyntraRestAPI.entity.UserEntity;
-import com.ceyntra.ceyntraRestAPI.model.ProfilePhotoUpdateModel;
-import com.ceyntra.ceyntraRestAPI.model.UserAndTravellerModel;
-import com.ceyntra.ceyntraRestAPI.model.UserContactModel;
+import com.ceyntra.ceyntraRestAPI.model.*;
 import com.ceyntra.ceyntraRestAPI.repository.TravellerRepository;
 import com.ceyntra.ceyntraRestAPI.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,5 +35,16 @@ public class UserProfileController {
     public int updateProfilePhoto(@RequestBody ProfilePhotoUpdateModel model){
         int result=travellerRepository.updatePhoto(model.getPhoto(), model.getUserID());
         return result;
+    }
+
+    @PutMapping("/updateProfileDetails")
+    public int updateProfileDetails(@RequestBody DetailsUpdateModel model){
+        int result1=userRepository.updateContactDetails(model.getEmail(), model.getContactNumber(), model.getUserID());
+        int result2=travellerRepository.updateDetails(model.getNic(), model.getFirstName(), model.getLastName(), model.getUserID());
+        if(result1*result2>0){
+            return 1;
+        }else{
+            return 0;
+        }
     }
 }
