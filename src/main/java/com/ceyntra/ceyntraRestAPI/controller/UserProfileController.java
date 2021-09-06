@@ -47,4 +47,9 @@ public class UserProfileController {
             return 0;
         }
     }
+
+    @PutMapping("/changePassword")
+    public void changePassword(@RequestBody changePasswordModel model){
+
+    }
 }
