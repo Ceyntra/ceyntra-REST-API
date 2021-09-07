@@ -63,4 +63,16 @@ public class UserProfileController {
             return 2;
         }
     }
+
+    @DeleteMapping("/deleteAccount/{id}")
+    public int deleteAccount(@PathVariable int id){
+       userRepository.deleteById(id);
+//       travellerRepository.deleteById(id);
+//       if(userRepository.existsById(id) || travellerRepository.existsById(id)){
+       if(userRepository.existsById(id)){
+            return 0;
+       }else{
+            return 1;
+       }
+    }
 }
