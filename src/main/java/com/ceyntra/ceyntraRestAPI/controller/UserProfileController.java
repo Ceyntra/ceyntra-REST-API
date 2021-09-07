@@ -5,6 +5,7 @@ import com.ceyntra.ceyntraRestAPI.entity.UserEntity;
 import com.ceyntra.ceyntraRestAPI.model.*;
 import com.ceyntra.ceyntraRestAPI.repository.TravellerRepository;
 import com.ceyntra.ceyntraRestAPI.repository.UserRepository;
+import com.ceyntra.ceyntraRestAPI.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,9 @@ public class UserProfileController {
 
     @Autowired
     private TravellerRepository travellerRepository;
+
+    @Autowired
+    private LoginService loginService;
 
     @GetMapping("/userProfile/{id}")
     public UserAndTravellerModel getUserData(@PathVariable int id){
@@ -49,7 +53,14 @@ public class UserProfileController {
     }
 
     @PutMapping("/changePassword")
-    public void changePassword(@RequestBody changePasswordModel model){
-
+    public int changePassword(@RequestBody changePasswordModel model){
+        String hashedNewPassword=loginService.doHash(model.getNewPassword());
+        String hashedCurrentPassword=loginService.doHash(model.getCurrentPassword());
+        String retrievedPassword=userRepository.getPasswordById(model.getUserID());
+        if(hashedCurrentPassword.equals(retrievedPassword)){
+            return userRepository.updateNewPassword(hashedNewPassword, model.getUserID());
+        }else{
+            return 2;
+        }
     }
 }
