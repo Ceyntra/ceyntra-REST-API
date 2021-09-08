@@ -15,6 +15,9 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 
+    @Query("select a from UserEntity a order by a.added_date desc ")
+    public List<UserEntity> getAllSortByAddedDate();
+
     @Query("SELECT a.userID from UserEntity a where a.email = :email and a.hashedPassword = :password and a.userType = :userType")
     public List<String> getMatchingUserIdForCredential(@Param("email") String email, @Param("password") String password, @Param("userType") int userType);
 

@@ -1,6 +1,7 @@
 package com.ceyntra.ceyntraRestAPI.entity;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "travelling_place")
@@ -17,11 +18,13 @@ public class TravellingPlaceEntity {
     private int number_of_votes;
     private String photo;
     private int is_accepted;
+    private Timestamp added_date_time;
+
 
     public TravellingPlaceEntity() {
     }
 
-    public TravellingPlaceEntity(int place_id, String place_name, String description, double latitude, double longitude, int place_added_user_id, double rating, int number_of_votes, String photo, int is_accepted) {
+    public TravellingPlaceEntity(int place_id, String place_name, String description, double latitude, double longitude, int place_added_user_id, double rating, int number_of_votes, String photo, int is_accepted, Timestamp added_date_time) {
         this.place_id = place_id;
         this.place_name = place_name;
         this.description = description;
@@ -32,6 +35,15 @@ public class TravellingPlaceEntity {
         this.number_of_votes = number_of_votes;
         this.photo = photo;
         this.is_accepted = is_accepted;
+        this.added_date_time = added_date_time;
+    }
+
+    public Timestamp getAdded_date_time() {
+        return added_date_time;
+    }
+
+    public void setAdded_date_time(Timestamp added_date_time) {
+        this.added_date_time = added_date_time;
     }
 
     public int getPlace_id() {
