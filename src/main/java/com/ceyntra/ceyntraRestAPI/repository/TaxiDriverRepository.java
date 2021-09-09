@@ -19,4 +19,8 @@ public interface TaxiDriverRepository extends JpaRepository<TaxiDriverEntity, In
     @Query("UPDATE TaxiDriverEntity a SET a.rating = :#{#rating}, a.number_of_votes = :#{#votes} where a.taxi_driver_id = :#{#taxi_driver_id}")
     public int updateRatingAndVotes(@Param("rating") double rating, @Param("votes") int votes, @Param("taxi_driver_id") int taxi_driver_id );
 
+    @Transactional
+    @Modifying
+    @Query("UPDATE TaxiDriverEntity a SET a.profile_photo= :photo WHERE a.taxi_driver_id= :id")
+    public int updatePhoto(@Param("photo") String photo, @Param("id") int id);
 }
