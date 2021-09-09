@@ -49,4 +49,15 @@ public class TaxiProfileController {
             return 0;
         }
     }
+
+    @DeleteMapping("/deleteDriverAccount/{id}")
+    public int deleteAccount(@PathVariable int id){
+        userRepository.deleteById(id);
+        taxiDriverRepository.deleteById(id);
+        if(userRepository.existsById(id) || taxiDriverRepository.existsById(id)){
+            return 0;
+        }else{
+            return 1;
+        }
+    }
 }
