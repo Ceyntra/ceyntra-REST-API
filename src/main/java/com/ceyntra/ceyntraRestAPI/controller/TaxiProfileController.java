@@ -42,7 +42,7 @@ public class TaxiProfileController {
     @PutMapping("/updateTaxiProfileDetails")
     public int updateTaxiProfileDetails(@RequestBody DetailsUpdateModel model){
         int result1=userRepository.updateContactDetails(model.getEmail(), model.getContactNumber(), model.getUserID());
-        int result2=taxiDriverRepository.updateTaxiDetails(model.getLicense(), model.getFirstName(), model.getLastName(), model.getUserID());
+        int result2=taxiDriverRepository.updateTaxiDetails(model.getLicense(), model.getFirstName(), model.getLastName(), model.getPricePerkm(), model.getUserID());
         if(result1*result2>0){
             return 1;
         }else{

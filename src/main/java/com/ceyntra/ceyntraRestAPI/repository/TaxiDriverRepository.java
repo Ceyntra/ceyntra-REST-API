@@ -26,6 +26,6 @@ public interface TaxiDriverRepository extends JpaRepository<TaxiDriverEntity, In
 
     @Transactional
     @Modifying
-    @Query("UPDATE TaxiDriverEntity a SET a.driver_license= :license, a.first_name= :fname, a.last_name= :lname WHERE a.taxi_driver_id= :id")
-    public int updateTaxiDetails(@Param("license") String license, @Param("fname") String fname, @Param("lname") String lname, @Param("id") int id);
+    @Query("UPDATE TaxiDriverEntity a SET a.driver_license= :license, a.first_name= :fname, a.last_name= :lname, a.per_km_price= :price WHERE a.taxi_driver_id= :id")
+    public int updateTaxiDetails(@Param("license") String license, @Param("fname") String fname, @Param("lname") String lname, @Param("price") int price, @Param("id") int id);
 }
