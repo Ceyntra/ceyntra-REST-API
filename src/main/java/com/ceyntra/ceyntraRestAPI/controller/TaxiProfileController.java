@@ -2,6 +2,7 @@ package com.ceyntra.ceyntraRestAPI.controller;
 
 import com.ceyntra.ceyntraRestAPI.entity.TaxiDriverEntity;
 import com.ceyntra.ceyntraRestAPI.entity.UserEntity;
+import com.ceyntra.ceyntraRestAPI.model.DetailsUpdateModel;
 import com.ceyntra.ceyntraRestAPI.model.ProfilePhotoUpdateModel;
 import com.ceyntra.ceyntraRestAPI.model.UserAndTaxiModel;
 import com.ceyntra.ceyntraRestAPI.model.UserContactModel;
@@ -36,5 +37,16 @@ public class TaxiProfileController {
     public int updateProfilePhoto(@RequestBody ProfilePhotoUpdateModel model){
         int result=taxiDriverRepository.updatePhoto(model.getPhoto(), model.getUserID());
         return result;
+    }
+
+    @PutMapping("/updateTaxiProfileDetails")
+    public int updateTaxiProfileDetails(@RequestBody DetailsUpdateModel model){
+        int result1=userRepository.updateContactDetails(model.getEmail(), model.getContactNumber(), model.getUserID());
+        int result2=taxiDriverRepository.updateTaxiDetails(model.getLicense(), model.getFirstName(), model.getLastName(), model.getUserID());
+        if(result1*result2>0){
+            return 1;
+        }else{
+            return 0;
+        }
     }
 }
