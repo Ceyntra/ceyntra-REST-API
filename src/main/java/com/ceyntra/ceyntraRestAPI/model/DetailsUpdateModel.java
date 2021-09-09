@@ -9,11 +9,12 @@ public class DetailsUpdateModel {
     private String contactNumber;
     private  String password;
     private String license;
+    private int pricePerkm;
 
     public DetailsUpdateModel() {
     }
 
-    public DetailsUpdateModel(int userID, String firstName, String lastName, String nic, String email, String contactNumber, String password, String license) {
+    public DetailsUpdateModel(int userID, String firstName, String lastName, String nic, String email, String contactNumber, String password, String license, int pricePerkm) {
         this.userID = userID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -22,6 +23,7 @@ public class DetailsUpdateModel {
         this.contactNumber = contactNumber;
         this.password = password;
         this.license = license;
+        this.pricePerkm = pricePerkm;
     }
 
     public int getUserID() {
@@ -86,5 +88,13 @@ public class DetailsUpdateModel {
 
     public void setLicense(String license) {
         this.license = license;
+    }
+
+    public int getPricePerkm() {
+        return pricePerkm;
+    }
+
+    public void setPricePerkm(int pricePerkm) {
+        this.pricePerkm = pricePerkm;
     }
 }
