@@ -19,4 +19,9 @@ public interface GuideRepository extends JpaRepository<GuideEntity, Integer> {
     @Modifying
     @Query("UPDATE GuideEntity a SET a.rating = :#{#rating}, a.number_of_votes = :#{#votes} where a.guide_id = :#{#guide_id}")
     public int updateRatingAndVotes(@Param("rating") double rating, @Param("votes") int votes, @Param("guide_id") int guide_id );
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE GuideEntity a SET a.profile_photo= :photo WHERE a.guide_id= :id")
+    public int updatePhoto(@Param("photo") String photo, @Param("id") int id);
 }
