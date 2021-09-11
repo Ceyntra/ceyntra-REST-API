@@ -21,6 +21,7 @@ public class TaxiPackageController {
         return taxiPackageRepository.save(taxiPackage);
     }
 
+
     @GetMapping("/taxiPackages/{taxiDriverId}")
     public List<TaxiPackageEntity> getAllTaxiPackagesByTaxiID(@PathVariable("taxiDriverId") int taxiDriverId){
 
@@ -28,8 +29,12 @@ public class TaxiPackageController {
 
     }
 
-
-
+    //Author:isuru
+    @GetMapping("getPackageDetails/{id}")
+    public List<TaxiPackageEntity> getPackageDetails(@PathVariable int id){
+        List<TaxiPackageEntity> packageList=taxiPackageRepository.getAllPackages(id);
+        return packageList;
+    }
 
 
 }

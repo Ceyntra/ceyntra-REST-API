@@ -10,11 +10,14 @@ public class DetailsUpdateModel {
     private  String password;
     private String license;
     private int pricePerkm;
+    private int pricePerDay;
+    private String description;
+    private String vehicleState;
 
     public DetailsUpdateModel() {
     }
 
-    public DetailsUpdateModel(int userID, String firstName, String lastName, String nic, String email, String contactNumber, String password, String license, int pricePerkm) {
+    public DetailsUpdateModel(int userID, String firstName, String lastName, String nic, String email, String contactNumber, String password, String license, int pricePerkm, int pricePerDay, String description, String vehicleState) {
         this.userID = userID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -24,6 +27,9 @@ public class DetailsUpdateModel {
         this.password = password;
         this.license = license;
         this.pricePerkm = pricePerkm;
+        this.pricePerDay = pricePerDay;
+        this.description = description;
+        this.vehicleState = vehicleState;
     }
 
     public int getUserID() {
@@ -96,5 +102,29 @@ public class DetailsUpdateModel {
 
     public void setPricePerkm(int pricePerkm) {
         this.pricePerkm = pricePerkm;
+    }
+
+    public int getPricePerDay() {
+        return pricePerDay;
+    }
+
+    public void setPricePerDay(int pricePerDay) {
+        this.pricePerDay = pricePerDay;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getVehicleState() {
+        return vehicleState;
+    }
+
+    public void setVehicleState(String vehicleState) {
+        this.vehicleState = vehicleState;
     }
 }
