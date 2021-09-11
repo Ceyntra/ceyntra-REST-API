@@ -11,6 +11,11 @@ import java.util.List;
 @Repository
 public interface TaxiPackageRepository extends JpaRepository<TaxiPackageEntity,Integer> {
 
+
+    List<TaxiPackageEntity> getTaxiPackageEntitiesByTaxiDriverId(int taxiDriverId);
+
+    //Author:isuru
     @Query("SELECT a FROM TaxiPackageEntity a WHERE a.taxiDriverId= :id")
     public List<TaxiPackageEntity> getAllPackages(@Param("id") int id);
+
 }
