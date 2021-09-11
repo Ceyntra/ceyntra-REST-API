@@ -3,9 +3,10 @@ package com.ceyntra.ceyntraRestAPI.controller;
 import com.ceyntra.ceyntraRestAPI.entity.TaxiPackageEntity;
 import com.ceyntra.ceyntraRestAPI.repository.TaxiPackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.repository.query.Param;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class TaxiPackageController {
@@ -19,6 +20,15 @@ public class TaxiPackageController {
 
         return taxiPackageRepository.save(taxiPackage);
     }
+
+    @GetMapping("/taxiPackages/{taxiDriverId}")
+    public List<TaxiPackageEntity> getAllTaxiPackagesByTaxiID(@PathVariable("taxiDriverId") int taxiDriverId){
+
+        return taxiPackageRepository.getTaxiPackageEntitiesByTaxiDriverId(taxiDriverId);
+
+    }
+
+
 
 
 
