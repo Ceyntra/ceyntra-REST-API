@@ -49,4 +49,15 @@ public class GuideProfileController {
             return 0;
         }
     }
+
+    @DeleteMapping("/deleteGuideAccount/{id}")
+    public int deleteAccount(@PathVariable int id){
+        userRepository.deleteById(id);
+        guideRepository.deleteById(id);
+        if(userRepository.existsById(id) || guideRepository.existsById(id)){
+            return 0;
+        }else{
+            return 1;
+        }
+    }
 }
