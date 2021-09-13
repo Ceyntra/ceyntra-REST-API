@@ -28,8 +28,8 @@ public class UserEntity {
     public UserEntity() {
     }
 
-    public UserEntity(int userID, String email, String telephone, int userType, String hashedPassword, int isLoggedIn, LocalDate added_date) {
-        this.userID = userID;
+    public UserEntity(String email, String telephone, int userType, String hashedPassword, int isLoggedIn, LocalDate added_date) {
+
         this.email = email;
         this.telephone = telephone;
         this.userType = userType;
