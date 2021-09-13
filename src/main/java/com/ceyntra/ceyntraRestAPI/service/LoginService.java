@@ -29,4 +29,12 @@ public class LoginService {
         int number = rnd.nextInt(999999);
         return number;
     }
+
+    public int generateFourDigitRandomNumber(){
+        Random rnd = new Random();
+        int number = rnd.nextInt(9999);
+        return number;
+    }
+
+
 }
