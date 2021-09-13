@@ -18,4 +18,9 @@ public interface HotelRepository extends JpaRepository<HotelEntity, Integer> {
     @Modifying
     @Query("UPDATE HotelEntity a SET a.rating = :#{#rating}, a.number_of_votes = :#{#votes} where a.hotel_id = :#{#hotel_id}")
     public int updateRatingAndVotes(@Param("rating") double rating, @Param("votes") int votes, @Param("hotel_id") int hotel_id );
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE HotelEntity a SET a.profile_photo= :photo WHERE a.hotel_id= :id")
+    public int updatePhoto(@Param("photo") String photo, @Param("id") int id);
 }
