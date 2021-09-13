@@ -23,4 +23,10 @@ public interface ForgetPasswordRepository extends JpaRepository<ForgetPasswordEn
     @Query("UPDATE ForgetPasswordEntity a SET a.pinNumber = :#{#pin} WHERE a.email = :#{#email}")
     public int updatePin(@Param("email") String email, @Param("pin") int pin);
 
+    ForgetPasswordEntity getForgetPasswordEntityByEmailAndPinNumber(String email,int pin);
+
+    @Transactional
+    @Modifying
+    int deleteByEmail(String email);
+
 }
