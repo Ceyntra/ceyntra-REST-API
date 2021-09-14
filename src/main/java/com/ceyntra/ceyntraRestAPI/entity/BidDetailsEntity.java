@@ -5,10 +5,10 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "bid_details")
-public class BidDetails {
+public class BidDetailsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+
     private int bid_id;
     private int traveller_id;
     private String pick_up_time;
@@ -21,10 +21,10 @@ public class BidDetails {
     private int active;
     private int close;
 
-    public BidDetails() {
+    public BidDetailsEntity() {
     }
 
-    public BidDetails(int traveller_id, String pick_up_time, String pick_up_location, String drop_location, Timestamp timestamp, int traveller_price, int number_of_passengers, String traveller_note, int active, int close) {
+    public BidDetailsEntity(int traveller_id, String pick_up_time, String pick_up_location, String drop_location, Timestamp timestamp, int traveller_price, int number_of_passengers, String traveller_note, int active, int close) {
         this.traveller_id = traveller_id;
         this.pick_up_time = pick_up_time;
         this.pick_up_location = pick_up_location;
