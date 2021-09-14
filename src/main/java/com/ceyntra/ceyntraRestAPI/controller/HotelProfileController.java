@@ -40,13 +40,24 @@ public class HotelProfileController {
     }
 
     @PutMapping("/updateHotelProfileDetails")
-    public int updateTaxiProfileDetails(@RequestBody DetailsUpdateModel model){
+    public int updateHotelProfileDetails(@RequestBody DetailsUpdateModel model){
         int result1=userRepository.updateContactDetails(model.getEmail(), model.getContactNumber(), model.getUserID());
         int result2=hotelRepository.updateHotelDetails(model.getFirstName(), model.getRegistrationNo(), model.getDescription(), model.getUserID());
         if(result1*result2>0){
             return 1;
         }else{
             return 0;
+        }
+    }
+
+    @DeleteMapping("/deleteHotelAccount/{id}")
+    public int deleteAccount(@PathVariable int id){
+        userRepository.deleteById(id);
+        hotelRepository.deleteById(id);
+        if(userRepository.existsById(id) || hotelRepository.existsById(id)){
+            return 0;
+        }else{
+            return 1;
         }
     }
 }
