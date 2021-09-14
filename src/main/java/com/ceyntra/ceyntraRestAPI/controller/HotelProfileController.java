@@ -2,6 +2,7 @@ package com.ceyntra.ceyntraRestAPI.controller;
 
 import com.ceyntra.ceyntraRestAPI.entity.HotelEntity;
 import com.ceyntra.ceyntraRestAPI.entity.UserEntity;
+import com.ceyntra.ceyntraRestAPI.model.DetailsUpdateModel;
 import com.ceyntra.ceyntraRestAPI.model.ProfilePhotoUpdateModel;
 import com.ceyntra.ceyntraRestAPI.model.UserAndHotelModel;
 import com.ceyntra.ceyntraRestAPI.model.UserContactModel;
@@ -36,5 +37,16 @@ public class HotelProfileController {
     public int updateProfilePhoto(@RequestBody ProfilePhotoUpdateModel model){
         int result=hotelRepository.updatePhoto(model.getPhoto(), model.getUserID());
         return result;
+    }
+
+    @PutMapping("/updateHotelProfileDetails")
+    public int updateTaxiProfileDetails(@RequestBody DetailsUpdateModel model){
+        int result1=userRepository.updateContactDetails(model.getEmail(), model.getContactNumber(), model.getUserID());
+        int result2=hotelRepository.updateHotelDetails(model.getFirstName(), model.getRegistrationNo(), model.getDescription(), model.getUserID());
+        if(result1*result2>0){
+            return 1;
+        }else{
+            return 0;
+        }
     }
 }
