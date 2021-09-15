@@ -20,11 +20,13 @@ public class BidDetailsEntity {
     private String traveller_note;
     private int active;
     private int close;
+    private double current_latitude;
+    private double current_longitude;
 
     public BidDetailsEntity() {
     }
 
-    public BidDetailsEntity(int traveller_id, String pick_up_time, String pick_up_location, String drop_location, Timestamp timestamp, int traveller_price, int number_of_passengers, String traveller_note, int active, int close) {
+    public BidDetailsEntity(int traveller_id, String pick_up_time, String pick_up_location, String drop_location, Timestamp timestamp, int traveller_price, int number_of_passengers, String traveller_note, int active, int close, double current_latitude, double current_longitude) {
         this.traveller_id = traveller_id;
         this.pick_up_time = pick_up_time;
         this.pick_up_location = pick_up_location;
@@ -35,6 +37,24 @@ public class BidDetailsEntity {
         this.traveller_note = traveller_note;
         this.active = active;
         this.close = close;
+        this.current_latitude = current_latitude;
+        this.current_longitude = current_longitude;
+    }
+
+    public double getCurrent_latitude() {
+        return current_latitude;
+    }
+
+    public void setCurrent_latitude(double current_latitude) {
+        this.current_latitude = current_latitude;
+    }
+
+    public double getCurrent_longitude() {
+        return current_longitude;
+    }
+
+    public void setCurrent_longitude(double current_longitude) {
+        this.current_longitude = current_longitude;
     }
 
     public int getBid_id() {
