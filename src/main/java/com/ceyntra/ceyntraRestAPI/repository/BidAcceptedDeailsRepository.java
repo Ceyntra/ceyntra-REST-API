@@ -16,8 +16,29 @@ public interface BidAcceptedDeailsRepository extends JpaRepository<BidAcceptedDe
     @Query("SELECT a from BidAcceptedDetailsEntity a where a.taxi_driver_id = :taxi_driver_id and a.taxi_driver_accept = 0 and a.taxi_driver_reject=0 and a.traveller_accept = 0 and a.traveller_reject=0 and a.activeState = 1")
     public List<BidAcceptedDetailsEntity> getActivateBidDetails(@Param("taxi_driver_id") int taxi_driver_id);
 
+    @Query("SELECT a from BidAcceptedDetailsEntity a where a.bid_id = :bid_id and a.taxi_driver_accept = 1 and a.taxi_driver_reject=0 and a.traveller_accept = 0 and a.traveller_reject=0 and a.activeState = 1")
+    public List<BidAcceptedDetailsEntity> getBidResponses(@Param("bid_id") int bid_id);
+
+    @Query("SELECT a from BidAcceptedDetailsEntity a where a.bid_id = :bid_id and a.taxi_driver_accept = 1 and a.taxi_driver_reject=0 and a.traveller_accept = 1 and a.traveller_reject=0 ")
+    public List<BidAcceptedDetailsEntity> findCAcceptedTaxiDriver(@Param("bid_id") int bid_id);
+
     @Transactional
     @Modifying
-    @Query("UPDATE UserEntity a SET a.isLoggedIn = :#{#isLoggedIn} WHERE a.userID = :#{#userId}")
-    public int updateUserLoggedInStatus(@Param("isLoggedIn") int isLoggedIn, @Param("userId") int userId);
+    @Query("UPDATE BidAcceptedDetailsEntity a SET a.taxi_driver_reject = 1 WHERE a.bid_id = :#{#bid_id} and a.taxi_driver_id = :#{#taxi_driver_id}")
+    public int updateTaxiDriverRejectBid(@Param("bid_id") int bid_id, @Param("taxi_driver_id") int taxi_driver_id);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE BidAcceptedDetailsEntity a SET a.traveller_accept = :#{#active} WHERE a.bid_id = :#{#bid_id} and a.taxi_driver_id = :#{#taxi_driver_id}")
+    public int updateTravellerAcceptBid(@Param("active") int active,@Param("bid_id") int bid_id, @Param("taxi_driver_id") int taxi_driver_id);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE BidAcceptedDetailsEntity a SET a.activeState = 0 WHERE a.bid_id = :#{#bid_id}")
+    public int deactivateBid(@Param("bid_id") int bid_id);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE BidAcceptedDetailsEntity a SET a.taxi_driver_accept = 1, a.comment = :#{#comment} WHERE a.bid_id = :#{#bid_id} and a.taxi_driver_id = :#{#taxi_driver_id}")
+    public int updateTaxiDriverAcceptBid(@Param("comment") String comment,@Param("bid_id") int bid_id,  @Param("taxi_driver_id") int taxi_driver_id);
 }

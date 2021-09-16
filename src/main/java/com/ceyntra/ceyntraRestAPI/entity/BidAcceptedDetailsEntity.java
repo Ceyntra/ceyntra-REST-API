@@ -22,11 +22,12 @@ public class BidAcceptedDetailsEntity {
     private int traveller_accept;
     private int traveller_reject;
     private int activeState;
+    private String comment;
 
     public BidAcceptedDetailsEntity() {
     }
 
-    public BidAcceptedDetailsEntity(int bid_id, int taxi_driver_id, int taxi_driver_accept, int taxi_driver_reject, int traveller_accept, int traveller_reject, int activeState) {
+    public BidAcceptedDetailsEntity(int bid_id, int taxi_driver_id, int taxi_driver_accept, int taxi_driver_reject, int traveller_accept, int traveller_reject, int activeState, String comment) {
         this.bid_id = bid_id;
         this.taxi_driver_id = taxi_driver_id;
         this.taxi_driver_accept = taxi_driver_accept;
@@ -34,6 +35,7 @@ public class BidAcceptedDetailsEntity {
         this.traveller_accept = traveller_accept;
         this.traveller_reject = traveller_reject;
         this.activeState = activeState;
+        this.comment = comment;
     }
 
     public int getActiveState() {
@@ -42,6 +44,14 @@ public class BidAcceptedDetailsEntity {
 
     public void setActiveState(int activeState) {
         this.activeState = activeState;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public int getBid_id() {
