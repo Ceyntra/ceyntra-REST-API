@@ -23,11 +23,12 @@ public class BidAcceptedDetailsEntity {
     private int traveller_reject;
     private int activeState;
     private String comment;
+    private int available;
 
     public BidAcceptedDetailsEntity() {
     }
 
-    public BidAcceptedDetailsEntity(int bid_id, int taxi_driver_id, int taxi_driver_accept, int taxi_driver_reject, int traveller_accept, int traveller_reject, int activeState, String comment) {
+    public BidAcceptedDetailsEntity(int bid_id, int taxi_driver_id, int taxi_driver_accept, int taxi_driver_reject, int traveller_accept, int traveller_reject, int activeState, String comment, int available) {
         this.bid_id = bid_id;
         this.taxi_driver_id = taxi_driver_id;
         this.taxi_driver_accept = taxi_driver_accept;
@@ -36,6 +37,7 @@ public class BidAcceptedDetailsEntity {
         this.traveller_reject = traveller_reject;
         this.activeState = activeState;
         this.comment = comment;
+        this.available = available;
     }
 
     public int getActiveState() {

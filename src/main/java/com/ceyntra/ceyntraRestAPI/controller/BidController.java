@@ -80,7 +80,7 @@ public class BidController {
 
             for(int i = 0; i< allTaxiDriverList.size(); i++){
                 System.out.println(allTaxiDriverList.get(i).getTaxi_driver_id());
-                BidAcceptedDetailsEntity bidAcceptedDetailsEntity1 = new BidAcceptedDetailsEntity(res.getBid_id(), allTaxiDriverList.get(i).getTaxi_driver_id(), 0,0,0,0,1, "");
+                BidAcceptedDetailsEntity bidAcceptedDetailsEntity1 = new BidAcceptedDetailsEntity(res.getBid_id(), allTaxiDriverList.get(i).getTaxi_driver_id(), 0,0,0,0,1,"", 1);
                 BidAcceptedDetailsEntity res2 = bidAcceptedDeailsRepository.save(bidAcceptedDetailsEntity1);
             }
             return 1;
@@ -141,6 +141,7 @@ public class BidController {
     @GetMapping("/closeBid/{id}")
     public int closeBid(@PathVariable("id") int id){
         int updateState = bidDetailsRepository.closeBid(0,1,id);
+        bidAcceptedDeailsRepository.deactivateBid(id);
         System.out.println(updateState);
         return updateState;
 
@@ -149,6 +150,7 @@ public class BidController {
     @GetMapping("/finishBid/{id}")
     public int finishBid(@PathVariable("id") int id){
         int updateState = bidDetailsRepository.finishBid(0,0,id);
+        bidAcceptedDeailsRepository.deactivateBid(id);
         System.out.println(updateState);
         return updateState;
 
@@ -180,23 +182,52 @@ public class BidController {
     }
 
     @PostMapping("/travellerAcceptBidResponse")
-    public int travellerAcceptBidResponse(@RequestBody BidAndSpId bidAndSpId){
+    public String travellerAcceptBidResponse(@RequestBody BidAndSpId bidAndSpId){
 //        System.out.println(comment);
         int updateState = bidAcceptedDeailsRepository.updateTravellerAcceptBid(1,bidAndSpId.getBid_id(), bidAndSpId.getTaxi_driver_id());
         int updateState2 = 0;
         if(updateState == 1){
-           updateState2 =   bidAcceptedDeailsRepository.deactivateBid(bidAndSpId.getBid_id());
+
+           updateState2 =   bidAcceptedDeailsRepository.notAvailableBid(bidAndSpId.getBid_id());
+
+           if(updateState2 == 3){
+               System.out.println("b");
+               return "updated";
+           }
+           else{
+               System.out.println("c");
+               bidAcceptedDeailsRepository.updateTravellerAcceptBid(0,bidAndSpId.getBid_id(), bidAndSpId.getTaxi_driver_id());
+               return  "notUpdated";
+           }
+
+//            return "updated";
+        }
+        else{
+
+            return "notUpdated";
         }
 
-        return updateState2;
+
+    }
+
+    @PostMapping("/travellerRejectBidResponse")
+    public int travellerRejectBidResponse(@RequestBody BidAndSpId bidAndSpId){
+        System.out.println("hello mama update");
+        int updateState = bidAcceptedDeailsRepository.updateTravellerRejectBid(1,bidAndSpId.getBid_id(), bidAndSpId.getTaxi_driver_id());
+
+       return updateState;
+
+
     }
 
 
     @GetMapping("/getBidResponses/{id}")
     public List<HashMap<String, Object>>  getBidResponses(@PathVariable int id){
+        System.out.println("hello fucker");
+        System.out.println(id);
         List<BidAcceptedDetailsEntity> bidAcceptedDetailsEntityList = bidAcceptedDeailsRepository.getBidResponses(id);
         List<HashMap<String, Object>> taxiDriverMap = new ArrayList<>();
-
+        System.out.println(bidAcceptedDetailsEntityList.size());
         for(int i =0; i< bidAcceptedDetailsEntityList.size(); i++){
             TaxiDriverEntity taxiDriverDetails = taxiDriverRepository.findById(bidAcceptedDetailsEntityList.get(i).getTaxi_driver_id()).get();
 
@@ -212,14 +243,26 @@ public class BidController {
     @GetMapping("/findCAcceptedTaxiDriver/{id}")
     public  HashMap<String, Object>  findCAcceptedTaxiDriver(@PathVariable int id){
         List<BidAcceptedDetailsEntity> list = bidAcceptedDeailsRepository.findCAcceptedTaxiDriver(id);
-        int userId = list.get(0).getTaxi_driver_id();
-        UserEntity userDetails = userRepository.findById(userId).get();
-        TaxiDriverEntity taxiDriverDetails = taxiDriverRepository.findById(userId).get();
+        BidDetailsEntity bidDetailsEntity = bidDetailsRepository.findById(id).get();
+
 
         HashMap<String, Object> details = new HashMap<>();
+        if(list.size() > 0){
+            if(bidDetailsEntity.getActive() == 1){
+                String comment = list.get(0).getComment();
+                int userId = list.get(0).getTaxi_driver_id();
+                UserEntity userDetails = userRepository.findById(userId).get();
+                TaxiDriverEntity taxiDriverDetails = taxiDriverRepository.findById(userId).get();
 
-        details.put("mobileNumber", userDetails.getTelephone());
-        details.put("taxiDriverDetails", taxiDriverDetails);
+
+
+                details.put("mobileNumber", userDetails.getTelephone());
+                details.put("comment", comment);
+                details.put("taxiDriverDetails", taxiDriverDetails);
+            }
+
+        }
+
 
 
         return details;
