@@ -157,12 +157,16 @@ public class BidController {
     }
 
     @GetMapping("/bidConfirmationNotification/{id}")
-    public List<BidDetailsEntity> bidConfirmationNotification(@PathVariable("id") int id){
+    public List<HashMap<String, Object>> bidConfirmationNotification(@PathVariable("id") int id){
        List<BidAcceptedDetailsEntity> list = bidAcceptedDeailsRepository.getBidConfirmationNotification(id);
-       List<BidDetailsEntity> list2 = new ArrayList<>();
+       List<HashMap<String, Object>> list2 = new ArrayList<>();
        for(int i = 0; i< list.size(); i++){
            BidDetailsEntity bidDetailsEntity = bidDetailsRepository.findById(list.get(i).getBid_id()).get();
-           list2.add(bidDetailsEntity);
+           String travellerPhone = userRepository.findById(bidDetailsEntity.getTraveller_id()).get().getTelephone();
+           HashMap<String, Object> details = new HashMap<>();
+           details.put("contactNumberTraveller", travellerPhone);
+           details.put("bidDetails", bidDetailsEntity);
+           list2.add(details);
        }
         return list2;
 
