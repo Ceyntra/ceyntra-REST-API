@@ -156,6 +156,18 @@ public class BidController {
 
     }
 
+    @GetMapping("/bidConfirmationNotification/{id}")
+    public List<BidDetailsEntity> bidConfirmationNotification(@PathVariable("id") int id){
+       List<BidAcceptedDetailsEntity> list = bidAcceptedDeailsRepository.getBidConfirmationNotification(id);
+       List<BidDetailsEntity> list2 = new ArrayList<>();
+       for(int i = 0; i< list.size(); i++){
+           BidDetailsEntity bidDetailsEntity = bidDetailsRepository.findById(list.get(i).getBid_id()).get();
+           list2.add(bidDetailsEntity);
+       }
+        return list2;
+
+    }
+
     @GetMapping("/getAvailableBidsForTaxiDriver/{id}")
     public List<BidDetailsEntity> getAvailableBidsForTaxiDriver(@PathVariable("id") int id){
         List<BidDetailsEntity> bidDetailsEntityList = new ArrayList<>();
@@ -183,24 +195,55 @@ public class BidController {
 
     @PostMapping("/travellerAcceptBidResponse")
     public String travellerAcceptBidResponse(@RequestBody BidAndSpId bidAndSpId){
-//        System.out.println(comment);
+
+        //        System.out.println(comment);
         int updateState = bidAcceptedDeailsRepository.updateTravellerAcceptBid(1,bidAndSpId.getBid_id(), bidAndSpId.getTaxi_driver_id());
         int updateState2 = 0;
         if(updateState == 1){
 
-           updateState2 =   bidAcceptedDeailsRepository.notAvailableBid(bidAndSpId.getBid_id());
+            updateState2 =   bidAcceptedDeailsRepository.notAvailableBid(bidAndSpId.getBid_id());
 
-           if(updateState2 == 3){
-               System.out.println("b");
-               return "updated";
-           }
-           else{
-               System.out.println("c");
-               bidAcceptedDeailsRepository.updateTravellerAcceptBid(0,bidAndSpId.getBid_id(), bidAndSpId.getTaxi_driver_id());
-               return  "notUpdated";
-           }
+            if(updateState2 == 3){
+                System.out.println("b");
+                return "updated";
+            }
+            else{
+                System.out.println("c");
+                bidAcceptedDeailsRepository.updateTravellerAcceptBid(0,bidAndSpId.getBid_id(), bidAndSpId.getTaxi_driver_id());
+                return  "notUpdated";
+            }
 
 //            return "updated";
+        }
+        else{
+
+            return "notUpdated";
+        }
+//
+
+    }
+
+    @PostMapping("/taxiDriverEndTrip")
+    public String taxiDriverEndTrip(@RequestBody BidAndSpId bidAndSpId){
+
+
+        int updateState = bidDetailsRepository.finishBid(0,0,bidAndSpId.getBid_id());
+        int updateState2 = 0;
+        if(updateState == 1){
+
+            updateState2 =   bidAcceptedDeailsRepository.deactivateBid(bidAndSpId.getBid_id());
+
+            if(updateState2 == 3){
+
+                return "updated";
+            }
+            else{
+
+                bidDetailsRepository.finishBid(1,0, bidAndSpId.getBid_id());
+                return  "notUpdated";
+            }
+
+//
         }
         else{
 

@@ -22,6 +22,9 @@ public interface BidAcceptedDeailsRepository extends JpaRepository<BidAcceptedDe
     @Query("SELECT a from BidAcceptedDetailsEntity a where a.bid_id = :bid_id and a.taxi_driver_accept = 1 and a.taxi_driver_reject=0 and a.traveller_accept = 1 and a.traveller_reject=0 ")
     public List<BidAcceptedDetailsEntity> findCAcceptedTaxiDriver(@Param("bid_id") int bid_id);
 
+    @Query("SELECT a from BidAcceptedDetailsEntity a where a.taxi_driver_id = :taxi_driver_id and a.taxi_driver_accept = 1 and a.taxi_driver_reject=0 and a.traveller_accept = 1 and a.traveller_reject=0 and a.activeState = 1 and a.available = 0")
+    public List<BidAcceptedDetailsEntity> getBidConfirmationNotification(@Param("taxi_driver_id") int taxi_driver_id);
+
     @Transactional
     @Modifying
     @Query("UPDATE BidAcceptedDetailsEntity a SET a.taxi_driver_reject = 1 WHERE a.bid_id = :#{#bid_id} and a.taxi_driver_id = :#{#taxi_driver_id}")
