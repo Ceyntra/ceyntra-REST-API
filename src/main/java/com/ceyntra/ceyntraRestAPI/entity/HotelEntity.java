@@ -13,6 +13,7 @@ public class HotelEntity {
     private String description;
     private double latitude;
     private double longitude;
+    private String district;
     private String registration_number;
     private String profile_photo;
     private  int number_of_votes;
@@ -22,12 +23,13 @@ public class HotelEntity {
     public HotelEntity() {
     }
 
-    public HotelEntity(int hotel_id, String name, String description, double latitude, double longitude, String registration_number, String profile_photo, int number_of_votes, double rating, int is_accepted) {
+    public HotelEntity(int hotel_id, String name, String description, double latitude, double longitude, String district, String registration_number, String profile_photo, int number_of_votes, double rating, int is_accepted) {
         this.hotel_id = hotel_id;
         this.name = name;
         this.description = description;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.district = district;
         this.registration_number = registration_number;
         this.profile_photo = profile_photo;
         this.number_of_votes = number_of_votes;
@@ -113,5 +115,13 @@ public class HotelEntity {
 
     public void setProfile_photo(String profile_photo) {
         this.profile_photo = profile_photo;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
     }
 }

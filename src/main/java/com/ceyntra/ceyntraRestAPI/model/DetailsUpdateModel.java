@@ -13,11 +13,12 @@ public class DetailsUpdateModel {
     private int pricePerDay;
     private String description;
     private String vehicleState;
+    private String registrationNo;
 
     public DetailsUpdateModel() {
     }
 
-    public DetailsUpdateModel(int userID, String firstName, String lastName, String nic, String email, String contactNumber, String password, String license, int pricePerkm, int pricePerDay, String description, String vehicleState) {
+    public DetailsUpdateModel(int userID, String firstName, String lastName, String nic, String email, String contactNumber, String password, String license, int pricePerkm, int pricePerDay, String description, String vehicleState, String registrationNo) {
         this.userID = userID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -30,6 +31,7 @@ public class DetailsUpdateModel {
         this.pricePerDay = pricePerDay;
         this.description = description;
         this.vehicleState = vehicleState;
+        this.registrationNo = registrationNo;
     }
 
     public int getUserID() {
@@ -126,5 +128,13 @@ public class DetailsUpdateModel {
 
     public void setVehicleState(String vehicleState) {
         this.vehicleState = vehicleState;
+    }
+
+    public String getRegistrationNo() {
+        return registrationNo;
+    }
+
+    public void setRegistrationNo(String registrationNo) {
+        this.registrationNo = registrationNo;
     }
 }
