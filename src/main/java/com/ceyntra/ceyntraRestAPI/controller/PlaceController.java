@@ -84,7 +84,14 @@ public class PlaceController {
     }
 
 
+        @GetMapping("/getPlaceByPlaceName/{place}")
+        public TravellingPlaceEntity getPlaceByPlaceName(@PathVariable("place") String place){
+            List<TravellingPlaceEntity> travellingPlaceEntityList = travellingPlaceRepository.getPlaceByPlaceName(place);
 
+            return travellingPlaceEntityList.get(0);
+
+
+        }
 
     @PostMapping("/getMetadataInPlace")
     public GetMetaDataPlaceModel getMetadataInPlace(@RequestBody UserPlaceId userPlaceId){
