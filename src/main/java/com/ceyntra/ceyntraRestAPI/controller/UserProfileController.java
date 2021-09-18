@@ -2,11 +2,10 @@ package com.ceyntra.ceyntraRestAPI.controller;
 
 import com.ceyntra.ceyntraRestAPI.entity.TravellerEntity;
 import com.ceyntra.ceyntraRestAPI.entity.UserEntity;
-import com.ceyntra.ceyntraRestAPI.model.ProfilePhotoUpdateModel;
-import com.ceyntra.ceyntraRestAPI.model.UserAndTravellerModel;
-import com.ceyntra.ceyntraRestAPI.model.UserContactModel;
+import com.ceyntra.ceyntraRestAPI.model.*;
 import com.ceyntra.ceyntraRestAPI.repository.TravellerRepository;
 import com.ceyntra.ceyntraRestAPI.repository.UserRepository;
+import com.ceyntra.ceyntraRestAPI.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +20,9 @@ public class UserProfileController {
 
     @Autowired
     private TravellerRepository travellerRepository;
+
+    @Autowired
+    private LoginService loginService;
 
     @GetMapping("/userProfile/{id}")
     public UserAndTravellerModel getUserData(@PathVariable int id){
@@ -37,5 +39,39 @@ public class UserProfileController {
     public int updateProfilePhoto(@RequestBody ProfilePhotoUpdateModel model){
         int result=travellerRepository.updatePhoto(model.getPhoto(), model.getUserID());
         return result;
+    }
+
+    @PutMapping("/updateProfileDetails")
+    public int updateProfileDetails(@RequestBody DetailsUpdateModel model){
+        int result1=userRepository.updateContactDetails(model.getEmail(), model.getContactNumber(), model.getUserID());
+        int result2=travellerRepository.updateDetails(model.getNic(), model.getFirstName(), model.getLastName(), model.getUserID());
+        if(result1*result2>0){
+            return 1;
+        }else{
+            return 0;
+        }
+    }
+
+    @PutMapping("/changePassword")
+    public int changePassword(@RequestBody changePasswordModel model){
+        String hashedNewPassword=loginService.doHash(model.getNewPassword());
+        String hashedCurrentPassword=loginService.doHash(model.getCurrentPassword());
+        String retrievedPassword=userRepository.getPasswordById(model.getUserID());
+        if(hashedCurrentPassword.equals(retrievedPassword)){
+            return userRepository.updateNewPassword(hashedNewPassword, model.getUserID());
+        }else{
+            return 2;
+        }
+    }
+
+    @DeleteMapping("/deleteAccount/{id}")
+    public int deleteAccount(@PathVariable int id){
+       userRepository.deleteById(id);
+       travellerRepository.deleteById(id);
+       if(userRepository.existsById(id) || travellerRepository.existsById(id)){
+            return 0;
+       }else{
+            return 1;
+       }
     }
 }

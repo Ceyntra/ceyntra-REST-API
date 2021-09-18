@@ -14,6 +14,15 @@ public class ResetPasswordModel {
     public ResetPasswordModel() {
     }
 
+    @Override
+    public String toString() {
+        return "ResetPasswordModel{" +
+                "pinNumber=" + pinNumber +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
+
     public int getPinNumber() {
         return pinNumber;
     }
