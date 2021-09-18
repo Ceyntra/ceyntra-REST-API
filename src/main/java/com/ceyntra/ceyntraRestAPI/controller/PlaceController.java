@@ -102,12 +102,10 @@ public class PlaceController {
         List<PlaceReviewEntity> reviews = new ArrayList<PlaceReviewEntity>();
         List<UserAndReviewModel> userAndReviewModels = new ArrayList<>();
 
-
         Optional<TravellerFavPlaceEntity> details = travellerFavPlaceRepository.findById(userPlaceId);
         List<PlaceReviewEntity> allReviews = placeReviewRepository.getAllReviews(userPlaceId.getPlace_id());
         Optional<PlaceRatingEntity> placeRatingEntity = placeRatingRepository.findById(userPlaceId);
         List<String> placePhotoEntityList = placePhotoRepository.getAllPhotosOfPlace(userPlaceId.getPlace_id());
-
 
 //setup myRatings
         if(placeRatingEntity.isPresent()){
