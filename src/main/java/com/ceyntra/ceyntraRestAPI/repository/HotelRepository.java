@@ -36,6 +36,9 @@ public interface HotelRepository extends JpaRepository<HotelEntity, Integer> {
     @Query("SELECT COUNT(a.hotel_id) from HotelEntity a where a.is_accepted = 1")
     public int getCount();
 
+    @Query("SELECT COUNT(a.hotel_id) from HotelEntity a where a.is_accepted = 0")
+    public int getRequestCount();
+
     @Query("SELECT a from HotelEntity a WHERE a.is_accepted = 1 ORDER BY a.name ASC")
     public List<HotelEntity> getRegisteredHotels();
 
