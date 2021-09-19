@@ -1,9 +1,6 @@
 package com.ceyntra.ceyntraRestAPI.controller;
 
-import com.ceyntra.ceyntraRestAPI.entity.TaxiDriverEntity;
-import com.ceyntra.ceyntraRestAPI.entity.TravellerFavPlaceEntity;
-import com.ceyntra.ceyntraRestAPI.entity.TravellerFavSpEntity;
-import com.ceyntra.ceyntraRestAPI.entity.TravellingPlaceEntity;
+import com.ceyntra.ceyntraRestAPI.entity.*;
 import com.ceyntra.ceyntraRestAPI.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,6 +25,10 @@ public class FavouriteController {
     UserRepository userRepository;
     @Autowired
     TaxiDriverRepository taxiDriverRepository;
+    @Autowired
+    HotelRepository hotelRepository;
+    @Autowired
+    GuideRepository guideRepository;
 
     @GetMapping("/loadFavPlaces/{id}")
     public List<TravellingPlaceEntity> loadFavPlaces(@PathVariable("id") int id){
@@ -58,6 +59,43 @@ public class FavouriteController {
         }
 
         return taxiDriverEntityList;
+
+    }
+
+
+    @GetMapping("/loadFavHotels/{id}")
+    public  List<HotelEntity>  loadFavHotels(@PathVariable("id") int id){
+        List<HotelEntity> hotelEntityList = new ArrayList<>();
+        List<TravellerFavSpEntity> travellerFavSpEntityList = travellerFavSpRepository.getFavTaxi(id);
+
+        for(int i=0; i<travellerFavSpEntityList.size(); i++){
+            int userType = userRepository.findById(travellerFavSpEntityList.get(i).getSp_id()).get().getUserType();
+            if(userType == 2){
+
+                hotelEntityList.add(hotelRepository.findById(travellerFavSpEntityList.get(i).getSp_id()).get());
+
+            }
+        }
+
+        return hotelEntityList;
+
+    }
+
+    @GetMapping("/loadFavGuides/{id}")
+    public   List<GuideEntity>  loadFavGuides(@PathVariable("id") int id){
+        List<GuideEntity> guideEntityList = new ArrayList<>();
+        List<TravellerFavSpEntity> travellerFavSpEntityList = travellerFavSpRepository.getFavTaxi(id);
+
+        for(int i=0; i<travellerFavSpEntityList.size(); i++){
+            int userType = userRepository.findById(travellerFavSpEntityList.get(i).getSp_id()).get().getUserType();
+            if(userType == 1){
+
+                guideEntityList.add(guideRepository.findById(travellerFavSpEntityList.get(i).getSp_id()).get());
+
+            }
+        }
+
+        return guideEntityList;
 
     }
 }

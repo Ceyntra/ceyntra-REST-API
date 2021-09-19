@@ -11,12 +11,14 @@ import com.ceyntra.ceyntraRestAPI.repository.BidAcceptedDeailsRepository;
 import com.ceyntra.ceyntraRestAPI.repository.BidDetailsRepository;
 import com.ceyntra.ceyntraRestAPI.repository.TaxiDriverRepository;
 import com.ceyntra.ceyntraRestAPI.repository.UserRepository;
+import com.ceyntra.ceyntraRestAPI.service.TravellingPlaceService;
 import net.bytebuddy.utility.JavaConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.Registration;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -36,11 +38,13 @@ public class BidController {
     BidAcceptedDeailsRepository bidAcceptedDeailsRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    TravellingPlaceService travellingPlaceService;
 
 
     @PostMapping("/addBidDetails")
-    public int addBidDetails(@RequestBody BidDetailsEntity bidDetailsEntity){
-        System.out.println(bidDetailsEntity.getNumber_of_passengers());
+    public int addBidDetails(@RequestBody BidDetailsEntity bidDetailsEntity) throws IOException, InterruptedException {
+
         Date date = new Date();
         Timestamp timestamp = new Timestamp(date.getTime());
 
@@ -55,32 +59,30 @@ public class BidController {
         List<TaxiDriverEntity> currentLocationAvailableTaxis = new ArrayList<>();
         List<TaxiDriverEntity> allTaxiDriverList = taxiDriverRepository.getAllTaxiDriversAndSortByRating();
 
-//        int distance = 0;
-//
-//
-//        CoordinatesModel anotherPlaceCoordinates = new CoordinatesModel(bidDetailsEntity.getCurrent_latitude(), bidDetailsEntity.getCurrent_longitude());
-//
-//        for (int i = 0; i< allTaxiDriverList.size(); i++){
-//            anotherPlaceCoordinates.setLatitude(allTaxiDriverList.get(i).getWorking_latitude());
-//            anotherPlaceCoordinates.setLongitude(allTaxiDriverList.get(i).getWorking_longitude());
-//
-//            distance = travellingPlaceService.calculateDistanceBetweenTwoPlaces(currentPlaceCoordinates, anotherPlaceCoordinates);
-//
-//            if(distance < 100){
-//                currentLocationAvailableTaxis.add(allTaxiDriverList.get(i));
-//            }
-//
-//
-//
-//        }
+        int distance = 0;
+
+
+        CoordinatesModel currentPlaceCoordinates = new CoordinatesModel(bidDetailsEntity.getCurrent_latitude(), bidDetailsEntity.getCurrent_longitude());
+        CoordinatesModel anotherPlaceCoordinates2 = new CoordinatesModel();
+
+        for (int i = 0; i< allTaxiDriverList.size(); i++){
+            anotherPlaceCoordinates2.setLatitude(allTaxiDriverList.get(i).getWorking_latitude());
+            anotherPlaceCoordinates2.setLongitude(allTaxiDriverList.get(i).getWorking_longitude());
+
+            distance = travellingPlaceService.calculateDistanceBetweenTwoPlaces(currentPlaceCoordinates, anotherPlaceCoordinates2);
+
+            if(distance < 50){
+                currentLocationAvailableTaxis.add(allTaxiDriverList.get(i));
+            }
+        }
 
 
 
         if(res.getDrop_location() != null){
 
-            for(int i = 0; i< allTaxiDriverList.size(); i++){
+            for(int i = 0; i< currentLocationAvailableTaxis.size(); i++){
                 System.out.println(allTaxiDriverList.get(i).getTaxi_driver_id());
-                BidAcceptedDetailsEntity bidAcceptedDetailsEntity1 = new BidAcceptedDetailsEntity(res.getBid_id(), allTaxiDriverList.get(i).getTaxi_driver_id(), 0,0,0,0,1,"", 1);
+                BidAcceptedDetailsEntity bidAcceptedDetailsEntity1 = new BidAcceptedDetailsEntity(res.getBid_id(), currentLocationAvailableTaxis.get(i).getTaxi_driver_id(), 0,0,0,0,1,"", 1);
                 BidAcceptedDetailsEntity res2 = bidAcceptedDeailsRepository.save(bidAcceptedDetailsEntity1);
             }
             return 1;
