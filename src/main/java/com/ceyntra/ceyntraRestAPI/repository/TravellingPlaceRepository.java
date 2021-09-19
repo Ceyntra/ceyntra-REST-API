@@ -16,6 +16,12 @@ public interface TravellingPlaceRepository extends JpaRepository<TravellingPlace
     @Query("SELECT a from TravellingPlaceEntity a where a.is_accepted = 1 order by a.rating desc ")
     public List<TravellingPlaceEntity> getPlacesAndSortByRating();
 
+    @Query("SELECT a from TravellingPlaceEntity a where a.is_accepted = 0 ")
+    public List<TravellingPlaceEntity> getNotAcceptedPlaces();
+
+    @Query("SELECT a from TravellingPlaceEntity a where a.place_name = :place ")
+    public List<TravellingPlaceEntity> getPlaceByPlaceName(@Param("place") String place);
+
     @Transactional
     @Modifying
     @Query("UPDATE TravellingPlaceEntity a SET a.rating = :#{#rating}, a.number_of_votes = :#{#votes} where a.place_id = :#{#placeId}")

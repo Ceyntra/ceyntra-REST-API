@@ -58,10 +58,10 @@ public class LoginController {
     public String login(@RequestBody LoginModel loginModel) {
         String hashedPassword = loginService.doHash(loginModel.getPassword());
         System.out.println(userRepository.findAll());
-        List<String> userID = userRepository.getMatchingUserIdForCredential(loginModel.getEmail(), hashedPassword, 1);
+        List<String> userID = userRepository.getMatchingUserIdForCredential(loginModel.getEmail(), hashedPassword, 8);
 
-        List<String> userEmail = userRepository.getMatchingUserEmail(loginModel.getEmail(), 1);
-        List<String> hashedPasswordUserId = userRepository.getMatchingUserHashedPassword(hashedPassword, 1);
+        List<String> userEmail = userRepository.getMatchingUserEmail(loginModel.getEmail(), 8);
+        List<String> hashedPasswordUserId = userRepository.getMatchingUserHashedPassword(hashedPassword, 8);
 
     //  check if there is matching user
         if (!userID.isEmpty() && userID.size() == 1) {

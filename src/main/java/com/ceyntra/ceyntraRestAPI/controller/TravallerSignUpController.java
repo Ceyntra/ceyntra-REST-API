@@ -10,6 +10,10 @@ import com.ceyntra.ceyntraRestAPI.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.util.Date;
+
 @RestController
 @CrossOrigin("*")
 public class TravallerSignUpController {
@@ -25,8 +29,10 @@ public class TravallerSignUpController {
 //    @Transactional(rollbac = RuntimeException.class )
     @PostMapping("/getUserDetails")
     public String getUserDetails(@RequestBody TravellerDetailsModel user){
+        Date date = new Date();
+        LocalDate localDate = LocalDate.now();
         String hashedPassword = loginService.doHash(user.getPassword());
-        UserEntity userDetails = new UserEntity(user.getEmail(),user.getContactNumber(),4,hashedPassword,0);
+        UserEntity userDetails = new UserEntity(user.getEmail(),user.getContactNumber(),4,hashedPassword,0,localDate);
         UserEntity x = userRepository.save(userDetails);
         int userID = userDetails.getUserID();
         try{

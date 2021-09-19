@@ -2,6 +2,8 @@ package com.ceyntra.ceyntraRestAPI.entity;
 
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = "user")
@@ -20,9 +22,20 @@ public class UserEntity {
     private String hashedPassword;
     @Column(name = "is_logged_in")
     private int isLoggedIn;
+    private LocalDate added_date;
 
 
     public UserEntity() {
+    }
+
+    public UserEntity(String email, String telephone, int userType, String hashedPassword, int isLoggedIn, LocalDate added_date) {
+
+        this.email = email;
+        this.telephone = telephone;
+        this.userType = userType;
+        this.hashedPassword = hashedPassword;
+        this.isLoggedIn = isLoggedIn;
+        this.added_date = added_date;
     }
 
     public UserEntity(String email, String telephone, int userType, String hashedPassword, int isLoggedIn) {
@@ -34,10 +47,20 @@ public class UserEntity {
         this.isLoggedIn = isLoggedIn;
     }
 
+    public LocalDate getAdded_date() {
+        return added_date;
+    }
+
+    public void setAdded_date(LocalDate added_date) {
+        this.added_date = added_date;
+    }
+
     public UserEntity(String email, String telephone) {
         this.email = email;
         this.telephone = telephone;
     }
+
+
 
     public UserEntity(String email) {
         this.email = email;
