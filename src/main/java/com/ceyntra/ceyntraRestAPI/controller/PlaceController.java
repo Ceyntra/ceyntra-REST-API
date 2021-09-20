@@ -50,7 +50,7 @@ public class PlaceController {
 
             distance = travellingPlaceService.calculateDistanceBetweenTwoPlaces(currentPlaceCoordinates, anotherPlaceCoordinates);
 
-            if(distance < 50){
+            if(distance < 60){
                 currentLocationAvailablePlaces.add(placeModelList.get(i));
             }
 
@@ -61,27 +61,14 @@ public class PlaceController {
     }
 
 
-//    dont delete upper commented function, this is dummy function and upper commented function is the real function with API.
-//    @PostMapping("/getAllPlaces")
-//    public List<TravellingPlaceEntity> getAllPlaces(@RequestBody CoordinatesModel currentPlaceCoordinates) throws IOException, InterruptedException {
-//        List<TravellingPlaceEntity> currentLocationAvailablePlaces = new ArrayList<>();
-//        List<TravellingPlaceEntity> placeModelList = travellingPlaceRepository.getPlacesAndSortByRating();
-//
-//
-//        CoordinatesModel anotherPlaceCoordinates = new CoordinatesModel();
-//
-//        for (int i = 0; i< placeModelList.size(); i++){
-//            anotherPlaceCoordinates.setLatitude(placeModelList.get(i).getLatitude());
-//            anotherPlaceCoordinates.setLongitude(placeModelList.get(i).getLongitude());
-//
-//                currentLocationAvailablePlaces.add(placeModelList.get(i));
-//
-//
-//        }
-//
-//
-//        return currentLocationAvailablePlaces;
-//    }
+
+    @PostMapping("/getAllPlacesForPopularFeed")
+    public List<TravellingPlaceEntity> getAllPlacesForPopularFeed() {
+
+        List<TravellingPlaceEntity> placeModelList = travellingPlaceRepository.getPlacesAndSortByRating();
+
+        return placeModelList;
+    }
 
 
         @GetMapping("/getPlaceByPlaceName/{place}")
