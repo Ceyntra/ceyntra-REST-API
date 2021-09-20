@@ -54,6 +54,12 @@ public class TravellerController {
         return travellerViewModels;
     }
 
+    @GetMapping("/getTravellerData/{id}")
+    public TravellerEntity getTravellerData(@PathVariable("id") int id){
+        return travellerRepository.findById(id).get();
+
+    }
+
     //Get traveller recent Activities(Requests) by userID
     @GetMapping("/getActivities/{userID}")
     public List<TravellerActivityModel> getTravellerActivities(@PathVariable("userID") int userID){
