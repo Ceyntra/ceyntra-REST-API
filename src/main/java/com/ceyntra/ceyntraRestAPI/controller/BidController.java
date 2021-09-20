@@ -209,12 +209,12 @@ public class BidController {
 
             updateState2 =   bidAcceptedDeailsRepository.notAvailableBid(bidAndSpId.getBid_id());
 
-            if(updateState2 == 3){
+            if(updateState2 > 0){
                 System.out.println("b");
                 return "updated";
             }
             else{
-                System.out.println("c");
+                System.out.println("notUpdated");
                 bidAcceptedDeailsRepository.updateTravellerAcceptBid(0,bidAndSpId.getBid_id(), bidAndSpId.getTaxi_driver_id());
                 return  "notUpdated";
             }
