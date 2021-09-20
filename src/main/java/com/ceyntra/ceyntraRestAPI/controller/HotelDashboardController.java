@@ -1,11 +1,13 @@
 package com.ceyntra.ceyntraRestAPI.controller;
 
+import com.ceyntra.ceyntraRestAPI.entity.BannedHotelsEntity;
 import com.ceyntra.ceyntraRestAPI.entity.HotelEntity;
 import com.ceyntra.ceyntraRestAPI.entity.UserEntity;
 import com.ceyntra.ceyntraRestAPI.model.AllSPModel;
 import com.ceyntra.ceyntraRestAPI.model.BriefDetailsModel;
 import com.ceyntra.ceyntraRestAPI.model.UserAndHotelModel;
 import com.ceyntra.ceyntraRestAPI.model.UserContactModel;
+import com.ceyntra.ceyntraRestAPI.repository.BannedHotelsRepository;
 import com.ceyntra.ceyntraRestAPI.repository.HotelRepository;
 import com.ceyntra.ceyntraRestAPI.repository.UserRepository;
 import com.ceyntra.ceyntraRestAPI.service.EmailService;
@@ -30,6 +32,9 @@ public class HotelDashboardController {
     @Autowired
     EmailService emailService;
 
+    @Autowired
+    BannedHotelsRepository bannedHotelsRepository;
+
     @GetMapping("/getHotelsCount")
     public List<Object> getCount(){
         List<Object> countList=new ArrayList<>();
@@ -39,6 +44,8 @@ public class HotelDashboardController {
         countList.add(requestCount);
         List<Object> top=hotelRepository.getTopFive();
         countList.add(top);
+        List<BannedHotelsEntity> bannedHotels=bannedHotelsRepository.findAll();
+        countList.add(bannedHotels);
         return countList;
     }
 
@@ -118,8 +125,18 @@ public class HotelDashboardController {
     }
 
     @PostMapping("/bannedHotel/{id}")
-    public void banHotel(@PathVariable int id){
+    public int banHotel(@PathVariable int id){
         UserEntity user=userRepository.getById(id);
         HotelEntity hotel=hotelRepository.getById(id);
+        userRepository.deleteById(id);
+        hotelRepository.deleteById(id);
+        BannedHotelsEntity bannedHotelsEntity=new BannedHotelsEntity(user.getEmail(), user.getTelephone(), hotel.getName(),
+                hotel.getDistrict(), hotel.getRegistration_number(), hotel.getRating(), hotel.getProfile_photo());
+        bannedHotelsRepository.save(bannedHotelsEntity);
+        if(userRepository.existsById(id) || hotelRepository.existsById(id)){
+            return 0;
+        }else{
+            return 1;
+        }
     }
 }

@@ -53,7 +53,7 @@ public interface HotelRepository extends JpaRepository<HotelEntity, Integer> {
     @Query("UPDATE HotelEntity a SET a.is_accepted= 1 WHERE a.hotel_id= :id")
     public int approveHotel(@Param("id") int id);
 
-    @Query(value = "SELECT name, rating, profile_photo FROM Hotel ORDER BY rating DESC LIMIT 5", nativeQuery = true)
+    @Query(value = "SELECT name, rating, profile_photo FROM Hotel WHERE is_accepted=1 ORDER BY rating DESC LIMIT 5", nativeQuery = true)
     public List<Object> getTopFive();
 
 
