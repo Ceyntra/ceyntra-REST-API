@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -36,5 +37,15 @@ public class TaxiPackageController {
         return packageList;
     }
 
+    @PutMapping("/updateTaxiPackage")
+    public void updateTaxiPackage(@RequestBody TaxiPackageEntity taxiPackage){
+
+        taxiPackageRepository.save(taxiPackage);
+    }
+    @DeleteMapping("deleteTaxiPackage/{id}")
+    public void deleteTaxiPackage(@PathVariable int id){
+
+        taxiPackageRepository.deleteById(id);
+    }
 
 }
