@@ -64,7 +64,7 @@ public class SpController {
 
             distance = travellingPlaceService.calculateDistanceBetweenTwoPlaces(currentPlaceCoordinates, anotherPlaceCoordinates);
 
-            if(distance < 50){
+            if(distance < 60){
                 currentLocationAvailableTaxis.add(allTaxiDriverList.get(i));
             }
 
@@ -92,7 +92,7 @@ public class SpController {
 
             distance = travellingPlaceService.calculateDistanceBetweenTwoPlaces(currentPlaceCoordinates, anotherPlaceCoordinates);
 
-            if(distance < 50){
+            if(distance < 60){
                 currentLocationAvailableHotels.add(allHotelList.get(i));
             }
 
@@ -120,7 +120,7 @@ public class SpController {
 
             distance = travellingPlaceService.calculateDistanceBetweenTwoPlaces(currentPlaceCoordinates, anotherPlaceCoordinates);
 
-            if(distance < 50){
+            if(distance < 60){
                 currentLocationAvailableGuides.add(allGuideList.get(i));
             }
 
