@@ -2,16 +2,16 @@ package com.ceyntra.ceyntraRestAPI.controller;
 
 import com.ceyntra.ceyntraRestAPI.entity.HotelEntity;
 import com.ceyntra.ceyntraRestAPI.entity.UserEntity;
+import com.ceyntra.ceyntraRestAPI.model.AllSPModel;
 import com.ceyntra.ceyntraRestAPI.model.BriefDetailsModel;
 import com.ceyntra.ceyntraRestAPI.model.UserAndHotelModel;
 import com.ceyntra.ceyntraRestAPI.model.UserContactModel;
 import com.ceyntra.ceyntraRestAPI.repository.HotelRepository;
 import com.ceyntra.ceyntraRestAPI.repository.UserRepository;
+import com.ceyntra.ceyntraRestAPI.service.EmailService;
+import net.bytebuddy.utility.JavaConstant;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +27,18 @@ public class HotelDashboardController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    EmailService emailService;
+
     @GetMapping("/getHotelsCount")
-    public List<Integer> getCount(){
-        List<Integer> countList=new ArrayList<>();
+    public List<Object> getCount(){
+        List<Object> countList=new ArrayList<>();
         int count = hotelRepository.getCount();
         int requestCount = hotelRepository.getRequestCount();
         countList.add(count);
         countList.add(requestCount);
+        List<Object> top=hotelRepository.getTopFive();
+        countList.add(top);
         return countList;
     }
 
@@ -69,5 +74,52 @@ public class HotelDashboardController {
             userAndHotelModelAll.add(new UserAndHotelModel(hotelList.get(i), userContactModel));
         }
         return userAndHotelModelAll;
+    }
+
+    @GetMapping("/getNewRequests/{userType}")
+    public List<AllSPModel> getNewRequests(@PathVariable int userType){
+        List<AllSPModel> allSPModels = new ArrayList<>();
+
+        if(userType==1){
+            List<HotelEntity> hotelRequestList=hotelRepository.getNewRequests();
+            for (int i=0; i<hotelRequestList.size(); i++){
+                Optional<UserEntity> user = userRepository.findById(hotelRequestList.get(i).getHotel_id());
+                UserContactModel userContactModel = new UserContactModel();
+                userContactModel.setEmail(user.get().getEmail());
+                userContactModel.setTelephone(user.get().getTelephone());
+                allSPModels.add(new AllSPModel(new UserAndHotelModel(hotelRequestList.get(i), userContactModel)));
+            }
+        }
+
+        return allSPModels;
+    }
+
+    @PutMapping("/approveHotelRequest/{id}")
+    public int approveHotelRequest(@PathVariable int id){
+        int result=hotelRepository.approveHotel(id);
+        String mail=userRepository.getHotelEmail(id);
+        String body = "Congratulations! Your account has been approved by the CeynTra team. Start your services and thank you for choosing CeynTra.";
+        emailService.sendEmail(mail, body, "Account Approved");
+        return result;
+    }
+
+    @DeleteMapping("/rejectHotelRequest/{id}")
+    public int rejectHotelRequest(@PathVariable int id){
+        String mail=userRepository.getHotelEmail(id);
+        userRepository.deleteById(id);
+        hotelRepository.deleteById(id);
+        String body = "Sorry... Your account has been rejected by the CeynTra team. Check and input valid account details and try to join the CeynTra group.";
+        emailService.sendEmail(mail, body, "Account Rejected");
+        if(userRepository.existsById(id) || hotelRepository.existsById(id)){
+            return 0;
+        }else{
+            return 1;
+        }
+    }
+
+    @PostMapping("/bannedHotel/{id}")
+    public void banHotel(@PathVariable int id){
+        UserEntity user=userRepository.getById(id);
+        HotelEntity hotel=hotelRepository.getById(id);
     }
 }
