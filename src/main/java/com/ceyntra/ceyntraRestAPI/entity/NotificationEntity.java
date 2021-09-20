@@ -6,30 +6,30 @@ import java.util.Date;
 
 @Entity
 @Table(name="notification")
-public class NotificatonEntity {
+public class NotificationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int userID;
+    private int chatRoomID;
     private String message;
     private Date timeStamp;
 
-    public NotificatonEntity() {
+    public NotificationEntity() {
     }
 
-    public NotificatonEntity(int id, int userID, String message, Date timeStamp) {
+    public NotificationEntity(int id, int chatRoomID, String message, Date timeStamp) {
         this.id = id;
-        this.userID = userID;
+        this.chatRoomID = chatRoomID;
         this.message = message;
         this.timeStamp = timeStamp;
     }
 
     @Override
     public String toString() {
-        return "NotificatonEntity{" +
+        return "NotificationEntity{" +
                 "id=" + id +
-                ", userID=" + userID +
+                ", userID=" + chatRoomID +
                 ", message='" + message + '\'' +
                 ", timeStamp=" + timeStamp +
                 '}';
@@ -44,11 +44,11 @@ public class NotificatonEntity {
     }
 
     public int getUserID() {
-        return userID;
+        return chatRoomID;
     }
 
     public void setUserID(int userID) {
-        this.userID = userID;
+        this.chatRoomID = userID;
     }
 
     public String getMessage() {

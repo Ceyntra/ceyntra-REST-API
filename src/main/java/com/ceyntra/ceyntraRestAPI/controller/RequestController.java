@@ -1,7 +1,6 @@
 package com.ceyntra.ceyntraRestAPI.controller;
 
-import com.ceyntra.ceyntraRestAPI.entity.GuidePackageEntity;
-import com.ceyntra.ceyntraRestAPI.entity.NotificatonEntity;
+import com.ceyntra.ceyntraRestAPI.entity.NotificationEntity;
 import com.ceyntra.ceyntraRestAPI.entity.TravellerRequestEntity;
 import com.ceyntra.ceyntraRestAPI.entity.chat.ChatMessage;
 import com.ceyntra.ceyntraRestAPI.entity.chat.ChatRoom;
@@ -13,14 +12,10 @@ import com.ceyntra.ceyntraRestAPI.repository.chat.PrivateChatMessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.sql.Timestamp;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
-import java.util.Locale;
+import java.util.List;
 
 @RestController
 public class RequestController {
@@ -43,14 +38,13 @@ public class RequestController {
 
         System.out.println(requestModel.toString());
 
-        //1)Add to notification
-        NotificatonEntity notificaton=new NotificatonEntity(0,requestModel.getSpId(),"You have new request for "+requestModel.getPackageName(), new Date());
-
-        notificationRepository.save(notificaton);
-
         //2)Add to chat table
         String msg=requestModel.getPackageType().toUpperCase() +" Package Request : " + requestModel.getPackageName()+" sent.";
         ChatMessage req= sendRequestToChat(new ChatMessage(0,requestModel.getTravellerId(),requestModel.getSpId(),msg,null,null));
+
+        //1)Add to notification
+        NotificationEntity notificaton=new NotificationEntity(0,req.getChatRoom().getChatRoomId(),"You have new request for "+requestModel.getPackageName(), new Date());
+        notificationRepository.save(notificaton);
 
         //1)Add to request table
         TravellerRequestEntity travellerRequest=travellerRequestRepository.save(new TravellerRequestEntity(0,requestModel.getPackageId(),requestModel.getTravellerId(),requestModel.getTimestamp(),false,requestModel.getSpId(),req.getChatRoom().getChatRoomId(),requestModel.getPackageType()));
@@ -87,9 +81,11 @@ public class RequestController {
         return msg;
     }
 
-
-
-
-
+    @DeleteMapping("deleteNotification/{chatRoomID}")
+    public List<NotificationEntity> deleteNotification(@PathVariable int chatRoomID){
+        List<NotificationEntity> notificaton=notificationRepository.deleteNotificationEntitiesByChatRoomID(chatRoomID);
+        return notificaton;
+    }
+    
 
 }
