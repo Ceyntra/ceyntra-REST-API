@@ -36,5 +36,10 @@ public class TaxiPackageController {
         return packageList;
     }
 
+    @PutMapping("/updateTaxiPackage")
+    public void updateTaxiPackage(@RequestBody TaxiPackageEntity taxiPackage){
+
+        taxiPackageRepository.save(taxiPackage);
+    }
 
 }
