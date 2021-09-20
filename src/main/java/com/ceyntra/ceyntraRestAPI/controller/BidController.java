@@ -68,10 +68,11 @@ public class BidController {
         for (int i = 0; i< allTaxiDriverList.size(); i++){
             anotherPlaceCoordinates2.setLatitude(allTaxiDriverList.get(i).getWorking_latitude());
             anotherPlaceCoordinates2.setLongitude(allTaxiDriverList.get(i).getWorking_longitude());
-
+            System.out.println(allTaxiDriverList.get(i).getFirst_name());
             distance = travellingPlaceService.calculateDistanceBetweenTwoPlaces(currentPlaceCoordinates, anotherPlaceCoordinates2);
 
-            if(distance < 50){
+            if(distance < 60){
+                System.out.println(allTaxiDriverList.get(i).getFirst_name());
                 currentLocationAvailableTaxis.add(allTaxiDriverList.get(i));
             }
         }
