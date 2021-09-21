@@ -2,13 +2,12 @@ package com.ceyntra.ceyntraRestAPI.controller;
 
 import com.ceyntra.ceyntraRestAPI.entity.BannedHotelsEntity;
 import com.ceyntra.ceyntraRestAPI.entity.HotelEntity;
+import com.ceyntra.ceyntraRestAPI.entity.TaxiDriverEntity;
 import com.ceyntra.ceyntraRestAPI.entity.UserEntity;
-import com.ceyntra.ceyntraRestAPI.model.AllSPModel;
-import com.ceyntra.ceyntraRestAPI.model.BriefDetailsModel;
-import com.ceyntra.ceyntraRestAPI.model.UserAndHotelModel;
-import com.ceyntra.ceyntraRestAPI.model.UserContactModel;
+import com.ceyntra.ceyntraRestAPI.model.*;
 import com.ceyntra.ceyntraRestAPI.repository.BannedHotelsRepository;
 import com.ceyntra.ceyntraRestAPI.repository.HotelRepository;
+import com.ceyntra.ceyntraRestAPI.repository.TaxiDriverRepository;
 import com.ceyntra.ceyntraRestAPI.repository.UserRepository;
 import com.ceyntra.ceyntraRestAPI.service.EmailService;
 import net.bytebuddy.utility.JavaConstant;
@@ -34,6 +33,9 @@ public class HotelDashboardController {
 
     @Autowired
     BannedHotelsRepository bannedHotelsRepository;
+
+    @Autowired
+    TaxiDriverRepository taxiDriverRepository;
 
     @GetMapping("/getHotelsCount")
     public List<Object> getCount(){
@@ -95,6 +97,17 @@ public class HotelDashboardController {
                 userContactModel.setEmail(user.get().getEmail());
                 userContactModel.setTelephone(user.get().getTelephone());
                 allSPModels.add(new AllSPModel(new UserAndHotelModel(hotelRequestList.get(i), userContactModel)));
+            }
+        }
+
+        if(userType==2){
+            List<TaxiDriverEntity> driverRequestList=taxiDriverRepository.getNewRequests();
+            for (int i=0; i<driverRequestList.size(); i++){
+                Optional<UserEntity> user = userRepository.findById(driverRequestList.get(i).getTaxi_driver_id());
+                UserContactModel userContactModel = new UserContactModel();
+                userContactModel.setEmail(user.get().getEmail());
+                userContactModel.setTelephone(user.get().getTelephone());
+                allSPModels.add(new AllSPModel(new UserAndTaxiModel(driverRequestList.get(i), userContactModel)));
             }
         }
 
