@@ -15,28 +15,32 @@ public class TaxiDriverEntity {
     private String last_name;
     private double working_latitude;
     private double working_longitude;
+    private String district;
     private int per_km_price;
     private int number_of_votes;
     private double rating;
     private String profile_photo;
     private String taxi_photo;
+    private int is_accepted;
 
 
     public TaxiDriverEntity() {
     }
 
-    public TaxiDriverEntity(int taxi_driver_id, String driver_license, String first_name, String last_name, double working_latitude, double working_longitude, int per_km_price, int number_of_votes, double rating, String profile_photo, String taxi_photo) {
+    public TaxiDriverEntity(int taxi_driver_id, String driver_license, String first_name, String last_name, double working_latitude, double working_longitude, String district, int per_km_price, int number_of_votes, double rating, String profile_photo, String taxi_photo, int is_accepted) {
         this.taxi_driver_id = taxi_driver_id;
         this.driver_license = driver_license;
         this.first_name = first_name;
         this.last_name = last_name;
         this.working_latitude = working_latitude;
         this.working_longitude = working_longitude;
+        this.district = district;
         this.per_km_price = per_km_price;
         this.number_of_votes = number_of_votes;
         this.rating = rating;
         this.profile_photo = profile_photo;
         this.taxi_photo = taxi_photo;
+        this.is_accepted = is_accepted;
     }
 
 
@@ -126,5 +130,21 @@ public class TaxiDriverEntity {
 
     public void setTaxi_photo(String taxi_photo) {
         this.taxi_photo = taxi_photo;
+    }
+
+    public int getIs_accepted() {
+        return is_accepted;
+    }
+
+    public void setIs_accepted(int is_accepted) {
+        this.is_accepted = is_accepted;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
     }
 }
