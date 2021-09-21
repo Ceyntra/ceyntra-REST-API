@@ -1,14 +1,8 @@
 package com.ceyntra.ceyntraRestAPI.controller;
 
-import com.ceyntra.ceyntraRestAPI.entity.BannedHotelsEntity;
-import com.ceyntra.ceyntraRestAPI.entity.HotelEntity;
-import com.ceyntra.ceyntraRestAPI.entity.TaxiDriverEntity;
-import com.ceyntra.ceyntraRestAPI.entity.UserEntity;
+import com.ceyntra.ceyntraRestAPI.entity.*;
 import com.ceyntra.ceyntraRestAPI.model.*;
-import com.ceyntra.ceyntraRestAPI.repository.BannedHotelsRepository;
-import com.ceyntra.ceyntraRestAPI.repository.HotelRepository;
-import com.ceyntra.ceyntraRestAPI.repository.TaxiDriverRepository;
-import com.ceyntra.ceyntraRestAPI.repository.UserRepository;
+import com.ceyntra.ceyntraRestAPI.repository.*;
 import com.ceyntra.ceyntraRestAPI.service.EmailService;
 import net.bytebuddy.utility.JavaConstant;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +30,9 @@ public class HotelDashboardController {
 
     @Autowired
     TaxiDriverRepository taxiDriverRepository;
+
+    @Autowired
+    GuideRepository guideRepository;
 
     @GetMapping("/getHotelsCount")
     public List<Object> getCount(){
@@ -108,6 +105,17 @@ public class HotelDashboardController {
                 userContactModel.setEmail(user.get().getEmail());
                 userContactModel.setTelephone(user.get().getTelephone());
                 allSPModels.add(new AllSPModel(new UserAndTaxiModel(driverRequestList.get(i), userContactModel)));
+            }
+        }
+
+        if(userType==3){
+            List<GuideEntity> guideRequestList=guideRepository.getNewRequests();
+            for (int i=0; i<guideRequestList.size(); i++){
+                Optional<UserEntity> user = userRepository.findById(guideRequestList.get(i).getGuide_id());
+                UserContactModel userContactModel = new UserContactModel();
+                userContactModel.setEmail(user.get().getEmail());
+                userContactModel.setTelephone(user.get().getTelephone());
+                allSPModels.add(new AllSPModel(new UserAndGuideModel(guideRequestList.get(i), userContactModel)));
             }
         }
 

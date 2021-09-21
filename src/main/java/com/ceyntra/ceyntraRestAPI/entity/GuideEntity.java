@@ -23,11 +23,12 @@ public class GuideEntity {
     private int is_accepted;
     private double latitude;
     private  double longitude;
+    private String district;
 
     public GuideEntity() {
     }
 
-    public GuideEntity(int guide_id, String nic, String description, String first_name, String last_name, int number_of_votes, double rating, String vehicle_state, int per_day_price, String profile_photo, String photo, int is_accepted, double latitude, double longitude) {
+    public GuideEntity(int guide_id, String nic, String description, String first_name, String last_name, int number_of_votes, double rating, String vehicle_state, int per_day_price, String profile_photo, String photo, int is_accepted, double latitude, double longitude, String district) {
         this.guide_id = guide_id;
         this.nic = nic;
         this.description = description;
@@ -42,6 +43,7 @@ public class GuideEntity {
         this.is_accepted = is_accepted;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.district = district;
     }
 
     public double getLatitude() {
@@ -154,5 +156,13 @@ public class GuideEntity {
 
     public void setIs_accepted(int is_accepted) {
         this.is_accepted = is_accepted;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
     }
 }

@@ -34,4 +34,27 @@ public interface GuideRepository extends JpaRepository<GuideEntity, Integer> {
 
     @Query("SELECT g from GuideEntity g where g.guide_id=:guide_id")
     GuideEntity getGuideEntityByGuide_id( @Param("guide_id") int guide_id);
+
+    @Query("SELECT COUNT(a.guide_id) from GuideEntity a where a.is_accepted = 1")
+    public int getGuideCount();
+
+    @Query("SELECT COUNT(a.guide_id) from GuideEntity a where a.is_accepted = 0")
+    public int getRequestCount();
+
+    @Query(value = "SELECT first_name, last_name, rating, profile_photo FROM guide WHERE is_accepted=1 ORDER BY rating DESC LIMIT 5", nativeQuery = true)
+    public List<Object> getTopFive();
+
+    @Query("SELECT a from GuideEntity a WHERE a.is_accepted = 1 ORDER BY a.first_name ASC")
+    public List<GuideEntity> getRegisteredGuides();
+
+    @Query("SELECT a from GuideEntity a WHERE a.is_accepted = 0")
+    public List<GuideEntity> getNewRequests();
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE GuideEntity a SET a.is_accepted= 1 WHERE a.guide_id= :id")
+    public int approveGuide(@Param("id") int id);
+
+    @Query("SELECT a from GuideEntity a WHERE UPPER(a.district)=UPPER(:district) AND a.is_accepted=1 ORDER BY a.first_name ASC")
+    public List<GuideEntity> getDistrictGuides(@Param("district") String district);
 }
