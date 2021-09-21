@@ -41,4 +41,10 @@ public class HotelPackagesController {
 
         hotelPackageRepository.deleteById(id);
     }
+
+    @GetMapping("getHotelPackageCount/{id}")
+    public int getHotelPackageCountByUserID(@PathVariable int id){
+
+        return hotelPackageRepository.countByHotelId(id);
+    }
 }

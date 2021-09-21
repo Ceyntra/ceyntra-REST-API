@@ -37,4 +37,11 @@ public class GuidePackageController {
 
         guidePackageRepository.deleteById(id);
     }
+
+
+    @GetMapping("getGuidePackageCount/{id}")
+    public int getGuidePackageCountByUserID(@PathVariable int id){
+
+        return guidePackageRepository.countByGuideId(id);
+    }
 }

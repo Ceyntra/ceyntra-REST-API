@@ -56,5 +56,8 @@ public interface HotelRepository extends JpaRepository<HotelEntity, Integer> {
     @Query(value = "SELECT name, rating, profile_photo FROM Hotel WHERE is_accepted=1 ORDER BY rating DESC LIMIT 5", nativeQuery = true)
     public List<Object> getTopFive();
 
+    @Query("SELECT h.rating FROM HotelEntity h  WHERE h.hotel_id=:id")
+    double getRatingByHotelID(@Param("id")  int id);
+
 
 }

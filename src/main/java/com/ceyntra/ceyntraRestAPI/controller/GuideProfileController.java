@@ -60,4 +60,10 @@ public class GuideProfileController {
             return 1;
         }
     }
+
+    @GetMapping("/getGuideRating/{id}")
+    public double getHotelRating(@PathVariable int id){
+        double rating=guideRepository.getRatingByGuideID(id);
+        return rating;
+    }
 }

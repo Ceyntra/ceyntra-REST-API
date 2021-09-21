@@ -60,4 +60,10 @@ public class TaxiProfileController {
             return 1;
         }
     }
+
+    @GetMapping("/getTaxiRating/{id}")
+    public double getHotelRating(@PathVariable int id){
+        double rating=taxiDriverRepository.getRatingByTaxiID(id);
+        return rating;
+    }
 }
