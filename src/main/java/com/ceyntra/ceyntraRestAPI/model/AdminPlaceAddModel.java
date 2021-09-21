@@ -6,6 +6,7 @@ public class AdminPlaceAddModel {
     private String description;
     private double latitude;
     private double longitude;
+    private String district;
     private String image1;
     private String image2;
     private String image3;
@@ -14,11 +15,12 @@ public class AdminPlaceAddModel {
     public AdminPlaceAddModel() {
     }
 
-    public AdminPlaceAddModel(String place_name, String description, double latitude, double longitude, String image1, String image2, String image3) {
+    public AdminPlaceAddModel(String place_name, String description, double latitude, double longitude, String district, String image1, String image2, String image3) {
         this.place_name = place_name;
         this.description = description;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.district = district;
         this.image1 = image1;
         this.image2 = image2;
         this.image3 = image3;
@@ -31,6 +33,7 @@ public class AdminPlaceAddModel {
                 ", description='" + description + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
+                ", district='" + district + '\'' +
                 ", image1='" + image1 + '\'' +
                 ", image2='" + image2 + '\'' +
                 ", image3='" + image3 + '\'' +
@@ -67,6 +70,14 @@ public class AdminPlaceAddModel {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
     }
 
     public String getImage1() {
