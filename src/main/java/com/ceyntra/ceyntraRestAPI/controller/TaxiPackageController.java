@@ -48,4 +48,10 @@ public class TaxiPackageController {
         taxiPackageRepository.deleteById(id);
     }
 
+    @GetMapping("getTaxiPackageCount/{id}")
+    public int getTAxiPackageCountByUserID(@PathVariable int id){
+
+        return taxiPackageRepository.countByTaxiDriverId(id);
+    }
+
 }

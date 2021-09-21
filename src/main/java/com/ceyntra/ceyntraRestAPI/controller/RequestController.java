@@ -43,7 +43,7 @@ public class RequestController {
         ChatMessage req= sendRequestToChat(new ChatMessage(0,requestModel.getTravellerId(),requestModel.getSpId(),msg,null,null));
 
         //1)Add to notification
-        NotificationEntity notificaton=new NotificationEntity(0,req.getChatRoom().getChatRoomId(),"You have new request for "+requestModel.getPackageName(), new Date());
+        NotificationEntity notificaton=new NotificationEntity(0,req.getChatRoom().getChatRoomId(),"You have new request for "+requestModel.getPackageName(), new Date(), requestModel.getSpId());
         notificationRepository.save(notificaton);
 
         //1)Add to request table
@@ -85,6 +85,11 @@ public class RequestController {
     public List<NotificationEntity> deleteNotification(@PathVariable int chatRoomID){
         List<NotificationEntity> notificaton=notificationRepository.deleteNotificationEntitiesByChatRoomID(chatRoomID);
         return notificaton;
+    }
+
+    @GetMapping("/getNewRquestsCount/{spID}")
+    public int getNewRequestCount(@PathVariable int spID){
+        return notificationRepository.countBySpID(spID);
     }
     
 

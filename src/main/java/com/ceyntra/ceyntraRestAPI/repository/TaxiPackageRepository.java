@@ -18,4 +18,6 @@ public interface TaxiPackageRepository extends JpaRepository<TaxiPackageEntity,I
     @Query("SELECT a FROM TaxiPackageEntity a WHERE a.taxiDriverId= :id")
     public List<TaxiPackageEntity> getAllPackages(@Param("id") int id);
 
+    int countByTaxiDriverId(int driverId);
+
 }

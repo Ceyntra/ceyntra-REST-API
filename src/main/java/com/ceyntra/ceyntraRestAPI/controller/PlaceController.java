@@ -9,10 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -34,6 +31,46 @@ public class PlaceController {
     PlaceRatingRepository placeRatingRepository;
     @Autowired
     PlacePhotoRepository placePhotoRepository;
+    @Autowired
+    TravellingPlacePhotoRepository travellingPlacePhotoRepository;
+
+
+    @PostMapping("/addNewPlace")
+    public int addNewPlace(@RequestBody TravellingPlaceDataModel tpm){
+        System.out.println("ksjdfkjdshfksj");
+        Date date = new Date();
+        Timestamp timestamp = new Timestamp(date.getTime());
+
+        TravellingPlaceEntity travellingPlaceEntity = new TravellingPlaceEntity();
+        travellingPlaceEntity.setNumber_of_votes(0);
+        travellingPlaceEntity.setRating(0);
+        travellingPlaceEntity.setIs_accepted(0);
+        travellingPlaceEntity.setAdded_date_time(timestamp);
+
+        travellingPlaceEntity.setPlace_name(tpm.getPlace_name());
+        travellingPlaceEntity.setDescription(tpm.getDescription());
+        travellingPlaceEntity.setDistrict(tpm.getDistrict());
+        travellingPlaceEntity.setPhoto(tpm.getPhoto());
+        travellingPlaceEntity.setLatitude(tpm.getLatitude());
+        travellingPlaceEntity.setLongitude(tpm.getLongitude());
+        travellingPlaceEntity.setPlace_added_user_id(tpm.getPlace_added_user_id());
+
+
+        List<String> photoList = tpm.getPhotoList();
+
+        TravellingPlaceEntity res =  travellingPlaceRepository.save(travellingPlaceEntity);
+        if(res.getDescription() != null){
+            for (int i =0; i < photoList.size(); i++){
+                TravellingPlacePhoto pt = new TravellingPlacePhoto(res.getPlace_id(), photoList.get(i));
+                travellingPlacePhotoRepository.save(pt);
+            }
+
+            return 1;
+        }
+
+        return 0;
+
+    }
 
 
     @PostMapping("/getAllPlaces")
@@ -178,6 +215,21 @@ public class PlaceController {
 
         return photoList;
     }
+
+    @GetMapping("/deletePlace/{id}")
+    public void deletePlace(@PathVariable("id") int id){
+         travellingPlaceRepository.deleteById(id);
+    }
+
+    @GetMapping("/approvePlace/{id}")
+    public int approvePlace(@PathVariable("id") int id){
+        int updateState = travellingPlaceRepository.approvePlace(1,id);
+
+        return updateState;
+    }
+
+
+
 
 
 }

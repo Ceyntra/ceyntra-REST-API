@@ -14,15 +14,17 @@ public class NotificationEntity {
     private int chatRoomID;
     private String message;
     private Date timeStamp;
+    private int spID;
 
     public NotificationEntity() {
     }
 
-    public NotificationEntity(int id, int chatRoomID, String message, Date timeStamp) {
+    public NotificationEntity(int id, int chatRoomID, String message, Date timeStamp,int spID) {
         this.id = id;
         this.chatRoomID = chatRoomID;
         this.message = message;
         this.timeStamp = timeStamp;
+        this.spID=spID;
     }
 
     @Override
@@ -33,6 +35,26 @@ public class NotificationEntity {
                 ", message='" + message + '\'' +
                 ", timeStamp=" + timeStamp +
                 '}';
+    }
+
+    public int getChatRoomID() {
+        return chatRoomID;
+    }
+
+    public void setChatRoomID(int chatRoomID) {
+        this.chatRoomID = chatRoomID;
+    }
+
+    public void setTimeStamp(Date timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
+    public int getSpID() {
+        return spID;
+    }
+
+    public void setSpID(int spID) {
+        this.spID = spID;
     }
 
     public int getId() {

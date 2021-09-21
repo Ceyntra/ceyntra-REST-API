@@ -57,4 +57,7 @@ public interface GuideRepository extends JpaRepository<GuideEntity, Integer> {
 
     @Query("SELECT a from GuideEntity a WHERE UPPER(a.district)=UPPER(:district) AND a.is_accepted=1 ORDER BY a.first_name ASC")
     public List<GuideEntity> getDistrictGuides(@Param("district") String district);
+
+    @Query("SELECT g.rating FROM GuideEntity g  WHERE g.guide_id=:id")
+    double getRatingByGuideID(@Param("id")  int id);
 }

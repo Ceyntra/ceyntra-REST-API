@@ -21,6 +21,11 @@ public class TravellingPlacePhoto {
         this.photo = photo;
     }
 
+    public TravellingPlacePhoto(int place_id, String photo) {
+        this.place_id = place_id;
+        this.photo = photo;
+    }
+
     @Override
     public String toString() {
         return "TravellingPlacePhoto{" +

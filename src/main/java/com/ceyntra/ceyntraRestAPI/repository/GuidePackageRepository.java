@@ -11,4 +11,6 @@ public interface GuidePackageRepository extends JpaRepository<GuidePackageEntity
 
     List<GuidePackageEntity> getGuidePackageEntitiesByGuideId(int guideId);
 
+    int countByGuideId(int guideId);
+
 }

@@ -32,6 +32,10 @@ public interface TaxiDriverRepository extends JpaRepository<TaxiDriverEntity, In
     @Query("SELECT t from TaxiDriverEntity t where t.taxi_driver_id=:taxi_driver_id")
     TaxiDriverEntity getTaxiDriverEntityByTaxi_driver_id(@Param("taxi_driver_id") int taxi_driver_id);
 
+
+    @Query("SELECT t.rating FROM TaxiDriverEntity t  WHERE t.taxi_driver_id=:id")
+    double getRatingByTaxiID(@Param("id")  int id);
+
     @Query("SELECT COUNT(a.taxi_driver_id) from TaxiDriverEntity a where a.is_accepted = 1")
     public int getDriverCount();
 
@@ -54,4 +58,5 @@ public interface TaxiDriverRepository extends JpaRepository<TaxiDriverEntity, In
 
     @Query("SELECT a from TaxiDriverEntity a WHERE UPPER(a.district)=UPPER(:district) AND a.is_accepted=1 ORDER BY a.first_name ASC")
     public List<TaxiDriverEntity> getDistrictDrivers(@Param("district") String district);
+
 }
