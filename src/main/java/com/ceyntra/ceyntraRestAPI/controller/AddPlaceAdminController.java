@@ -37,10 +37,10 @@ public class AddPlaceAdminController {
         TravellingPlacePhoto travellingPlacePhoto1=new TravellingPlacePhoto(0,travellingPlaceEntity.getPlace_id(),placeAddModel.getImage1());
         travellingPlacePhotoRepository.save(travellingPlacePhoto1);
 
-        TravellingPlacePhoto travellingPlacePhoto2=new TravellingPlacePhoto(1,travellingPlaceEntity.getPlace_id(),placeAddModel.getImage2());
+        TravellingPlacePhoto travellingPlacePhoto2=new TravellingPlacePhoto(0,travellingPlaceEntity.getPlace_id(),placeAddModel.getImage2());
         travellingPlacePhotoRepository.save(travellingPlacePhoto2);
 
-        TravellingPlacePhoto travellingPlacePhoto3=new TravellingPlacePhoto(2,travellingPlaceEntity.getPlace_id(),placeAddModel.getImage3());
+        TravellingPlacePhoto travellingPlacePhoto3=new TravellingPlacePhoto(0,travellingPlaceEntity.getPlace_id(),placeAddModel.getImage3());
         travellingPlacePhotoRepository.save(travellingPlacePhoto3);
 
         return ResponseEntity.ok(savedPlace);

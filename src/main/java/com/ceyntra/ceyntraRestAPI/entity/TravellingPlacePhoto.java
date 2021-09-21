@@ -1,14 +1,13 @@
 package com.ceyntra.ceyntraRestAPI.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "travelling_place_photo")
 public class TravellingPlacePhoto {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int photo_id;
     private int place_id;
     private String photo;
