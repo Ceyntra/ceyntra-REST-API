@@ -22,8 +22,16 @@ public interface TravellingPlaceRepository extends JpaRepository<TravellingPlace
     @Query("SELECT a from TravellingPlaceEntity a where a.place_name = :place ")
     public List<TravellingPlaceEntity> getPlaceByPlaceName(@Param("place") String place);
 
+//    @Query("delete from TravellingPlaceEntity a  where a.place_id = :place_id ")
+//    public List<TravellingPlaceEntity> delete(@Param("place_id") int place_id);
+
     @Transactional
     @Modifying
     @Query("UPDATE TravellingPlaceEntity a SET a.rating = :#{#rating}, a.number_of_votes = :#{#votes} where a.place_id = :#{#placeId}")
     public int updateRatingAndVotes(@Param("rating") double rating,@Param("votes") int votes, @Param("placeId") int placeId );
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE TravellingPlaceEntity a SET a.is_accepted = :#{#is_accepted} where a.place_id = :#{#placeId}")
+    public int approvePlace(@Param("is_accepted") int is_accepted, @Param("placeId") int placeId );
 }

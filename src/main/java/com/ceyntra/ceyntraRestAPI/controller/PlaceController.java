@@ -216,5 +216,20 @@ public class PlaceController {
         return photoList;
     }
 
+    @GetMapping("/deletePlace/{id}")
+    public void deletePlace(@PathVariable("id") int id){
+         travellingPlaceRepository.deleteById(id);
+    }
+
+    @GetMapping("/approvePlace/{id}")
+    public int approvePlace(@PathVariable("id") int id){
+        int updateState = travellingPlaceRepository.approvePlace(1,id);
+
+        return updateState;
+    }
+
+
+
+
 
 }
