@@ -12,4 +12,6 @@ public interface HotelPackageRepository extends JpaRepository<HotelPackageEntity
 
     List<HotelPackageEntity> getHotelPackageEntitiesByHotelId(int hotelId);
 
+    int countByHotelId(int hotelId);
+
 }
