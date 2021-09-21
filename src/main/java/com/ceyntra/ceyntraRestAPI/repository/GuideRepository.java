@@ -34,4 +34,7 @@ public interface GuideRepository extends JpaRepository<GuideEntity, Integer> {
 
     @Query("SELECT g from GuideEntity g where g.guide_id=:guide_id")
     GuideEntity getGuideEntityByGuide_id( @Param("guide_id") int guide_id);
+
+    @Query("SELECT g.rating FROM GuideEntity g  WHERE g.guide_id=:id")
+    double getRatingByGuideID(@Param("id")  int id);
 }

@@ -15,5 +15,8 @@ public interface NotificationRepository extends JpaRepository<NotificationEntity
     List<NotificationEntity> deleteNotificationEntitiesByChatRoomID(int chatRoomID);
 
 
+    int countBySpID(int spID);
+
+
 
 }

@@ -60,4 +60,11 @@ public class HotelProfileController {
             return 1;
         }
     }
+
+    @GetMapping("/getHotelRating/{id}")
+    public double getHotelRating(@PathVariable int id){
+        double rating=hotelRepository.getRatingByHotelID(id);
+        return rating;
+    }
+
 }
