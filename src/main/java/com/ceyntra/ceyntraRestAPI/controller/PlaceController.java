@@ -36,37 +36,11 @@ public class PlaceController {
     PlacePhotoRepository placePhotoRepository;
 
 
-//    @PostMapping("/getAllPlacesForLocation")
-//    public List<TravellingPlaceModel> getAllPlaces(@RequestBody CoordinatesModel currentPlaceCoordinates) throws IOException, InterruptedException {
-//        List<TravellingPlaceModel> currentLocationAvailablePlaces = new ArrayList<>();
-//        List<TravellingPlaceModel> placeModelList = travellingPlaceRepository.getPlacesAndSortByRating();
-//        int distance = 0;
-//
-//        CoordinatesModel anotherPlaceCoordinates = new CoordinatesModel();
-//
-//        for (int i = 0; i< placeModelList.size(); i++){
-//            anotherPlaceCoordinates.setLatitude(placeModelList.get(i).getLatitude());
-//            anotherPlaceCoordinates.setLongitude(placeModelList.get(i).getLongitude());
-//
-//            distance = travellingPlaceService.calculateDistanceBetweenTwoPlaces(currentPlaceCoordinates, anotherPlaceCoordinates);
-//
-//            if(distance < 100){
-//                currentLocationAvailablePlaces.add(placeModelList.get(i));
-//            }
-//
-//        }
-//
-//
-//    return currentLocationAvailablePlaces;
-//    }
-
-
-//    dont delete upper commented function, this is dummy function and upper commented function is the real function with API.
     @PostMapping("/getAllPlaces")
     public List<TravellingPlaceEntity> getAllPlaces(@RequestBody CoordinatesModel currentPlaceCoordinates) throws IOException, InterruptedException {
         List<TravellingPlaceEntity> currentLocationAvailablePlaces = new ArrayList<>();
         List<TravellingPlaceEntity> placeModelList = travellingPlaceRepository.getPlacesAndSortByRating();
-
+        int distance = 0;
 
         CoordinatesModel anotherPlaceCoordinates = new CoordinatesModel();
 
@@ -74,13 +48,26 @@ public class PlaceController {
             anotherPlaceCoordinates.setLatitude(placeModelList.get(i).getLatitude());
             anotherPlaceCoordinates.setLongitude(placeModelList.get(i).getLongitude());
 
-                currentLocationAvailablePlaces.add(placeModelList.get(i));
+            distance = travellingPlaceService.calculateDistanceBetweenTwoPlaces(currentPlaceCoordinates, anotherPlaceCoordinates);
 
+            if(distance < 60){
+                currentLocationAvailablePlaces.add(placeModelList.get(i));
+            }
 
         }
 
 
-        return currentLocationAvailablePlaces;
+    return currentLocationAvailablePlaces;
+    }
+
+
+
+    @PostMapping("/getAllPlacesForPopularFeed")
+    public List<TravellingPlaceEntity> getAllPlacesForPopularFeed() {
+
+        List<TravellingPlaceEntity> placeModelList = travellingPlaceRepository.getPlacesAndSortByRating();
+
+        return placeModelList;
     }
 
 

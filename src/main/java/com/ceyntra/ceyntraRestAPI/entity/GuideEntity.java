@@ -21,11 +21,13 @@ public class GuideEntity {
     private String profile_photo;
     private String photo;
     private int is_accepted;
+    private double latitude;
+    private  double longitude;
 
     public GuideEntity() {
     }
 
-    public GuideEntity(int guide_id, String nic, String description, String first_name, String last_name, int number_of_votes, double rating, String vehicle_state, int per_day_price, String profile_photo, String photo, int is_accepted) {
+    public GuideEntity(int guide_id, String nic, String description, String first_name, String last_name, int number_of_votes, double rating, String vehicle_state, int per_day_price, String profile_photo, String photo, int is_accepted, double latitude, double longitude) {
         this.guide_id = guide_id;
         this.nic = nic;
         this.description = description;
@@ -38,6 +40,24 @@ public class GuideEntity {
         this.profile_photo = profile_photo;
         this.photo = photo;
         this.is_accepted = is_accepted;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public int getPer_day_price() {

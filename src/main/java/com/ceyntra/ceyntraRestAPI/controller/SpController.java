@@ -53,27 +53,27 @@ public class SpController {
         List<TaxiDriverEntity> currentLocationAvailableTaxis = new ArrayList<>();
         List<TaxiDriverEntity> allTaxiDriverList = taxiDriverRepository.getAllTaxiDriversAndSortByRating();
 
-//        int distance = 0;
-//
-//
-//        CoordinatesModel anotherPlaceCoordinates = new CoordinatesModel();
-//
-//        for (int i = 0; i< allTaxiDriverList.size(); i++){
-//            anotherPlaceCoordinates.setLatitude(allTaxiDriverList.get(i).getWorking_latitude());
-//            anotherPlaceCoordinates.setLongitude(allTaxiDriverList.get(i).getWorking_longitude());
-//
-//            distance = travellingPlaceService.calculateDistanceBetweenTwoPlaces(currentPlaceCoordinates, anotherPlaceCoordinates);
-//
-//            if(distance < 100){
-//                currentLocationAvailableTaxis.add(allTaxiDriverList.get(i));
-//            }
-//
-//
-//
-//        }
+        int distance = 0;
 
 
-        return allTaxiDriverList;
+        CoordinatesModel anotherPlaceCoordinates = new CoordinatesModel();
+
+        for (int i = 0; i< allTaxiDriverList.size(); i++){
+            anotherPlaceCoordinates.setLatitude(allTaxiDriverList.get(i).getWorking_latitude());
+            anotherPlaceCoordinates.setLongitude(allTaxiDriverList.get(i).getWorking_longitude());
+
+            distance = travellingPlaceService.calculateDistanceBetweenTwoPlaces(currentPlaceCoordinates, anotherPlaceCoordinates);
+
+            if(distance < 60){
+                currentLocationAvailableTaxis.add(allTaxiDriverList.get(i));
+            }
+
+
+
+        }
+
+
+        return currentLocationAvailableTaxis;
     }
 
     @PostMapping("/getAllHotelsForLocation")
@@ -81,27 +81,27 @@ public class SpController {
         List<HotelEntity> currentLocationAvailableHotels = new ArrayList<>();
         List<HotelEntity> allHotelList = hotelRepository.getAllHotelsAndSortByRating();
 
-//        int distance = 0;
-//
-//
-//        CoordinatesModel anotherPlaceCoordinates = new CoordinatesModel();
-//
-//        for (int i = 0; i< allTaxiDriverList.size(); i++){
-//            anotherPlaceCoordinates.setLatitude(allTaxiDriverList.get(i).getWorking_latitude());
-//            anotherPlaceCoordinates.setLongitude(allTaxiDriverList.get(i).getWorking_longitude());
-//
-//            distance = travellingPlaceService.calculateDistanceBetweenTwoPlaces(currentPlaceCoordinates, anotherPlaceCoordinates);
-//
-//            if(distance < 100){
-//                currentLocationAvailableTaxis.add(allTaxiDriverList.get(i));
-//            }
-//
-//
-//
-//        }
+        int distance = 0;
 
 
-        return allHotelList;
+        CoordinatesModel anotherPlaceCoordinates = new CoordinatesModel();
+
+        for (int i = 0; i< allHotelList.size(); i++){
+            anotherPlaceCoordinates.setLatitude(allHotelList.get(i).getLatitude());
+            anotherPlaceCoordinates.setLongitude(allHotelList.get(i).getLongitude());
+
+            distance = travellingPlaceService.calculateDistanceBetweenTwoPlaces(currentPlaceCoordinates, anotherPlaceCoordinates);
+
+            if(distance < 60){
+                currentLocationAvailableHotels.add(allHotelList.get(i));
+            }
+
+
+
+        }
+
+
+        return currentLocationAvailableHotels;
     }
 
     @PostMapping("/getAllGuidesForLocation")
@@ -109,27 +109,27 @@ public class SpController {
         List<GuideEntity> currentLocationAvailableGuides = new ArrayList<>();
         List<GuideEntity> allGuideList = guideRepository.getAllGuidesAndSortByRating();
 
-//        int distance = 0;
-//
-//
-//        CoordinatesModel anotherPlaceCoordinates = new CoordinatesModel();
-//
-//        for (int i = 0; i< allTaxiDriverList.size(); i++){
-//            anotherPlaceCoordinates.setLatitude(allTaxiDriverList.get(i).getWorking_latitude());
-//            anotherPlaceCoordinates.setLongitude(allTaxiDriverList.get(i).getWorking_longitude());
-//
-//            distance = travellingPlaceService.calculateDistanceBetweenTwoPlaces(currentPlaceCoordinates, anotherPlaceCoordinates);
-//
-//            if(distance < 100){
-//                currentLocationAvailableTaxis.add(allTaxiDriverList.get(i));
-//            }
-//
-//
-//
-//        }
+        int distance = 0;
 
 
-        return allGuideList;
+        CoordinatesModel anotherPlaceCoordinates = new CoordinatesModel();
+
+        for (int i = 0; i< allGuideList.size(); i++){
+            anotherPlaceCoordinates.setLatitude(allGuideList.get(i).getLatitude());
+            anotherPlaceCoordinates.setLongitude(allGuideList.get(i).getLongitude());
+
+            distance = travellingPlaceService.calculateDistanceBetweenTwoPlaces(currentPlaceCoordinates, anotherPlaceCoordinates);
+
+            if(distance < 60){
+                currentLocationAvailableGuides.add(allGuideList.get(i));
+            }
+
+
+
+        }
+
+
+        return currentLocationAvailableGuides;
     }
 
 
