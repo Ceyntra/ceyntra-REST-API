@@ -32,4 +32,26 @@ public interface TaxiDriverRepository extends JpaRepository<TaxiDriverEntity, In
     @Query("SELECT t from TaxiDriverEntity t where t.taxi_driver_id=:taxi_driver_id")
     TaxiDriverEntity getTaxiDriverEntityByTaxi_driver_id(@Param("taxi_driver_id") int taxi_driver_id);
 
+    @Query("SELECT COUNT(a.taxi_driver_id) from TaxiDriverEntity a where a.is_accepted = 1")
+    public int getDriverCount();
+
+    @Query("SELECT COUNT(a.taxi_driver_id) from TaxiDriverEntity a where a.is_accepted = 0")
+    public int getRequestCount();
+
+    @Query(value = "SELECT first_name, last_name, rating, profile_photo FROM taxi_driver WHERE is_accepted=1 ORDER BY rating DESC LIMIT 5", nativeQuery = true)
+    public List<Object> getTopFive();
+
+    @Query("SELECT a from TaxiDriverEntity a WHERE a.is_accepted = 1 ORDER BY a.first_name ASC")
+    public List<TaxiDriverEntity> getRegisteredDrivers();
+
+    @Query("SELECT a from TaxiDriverEntity a WHERE a.is_accepted = 0")
+    public List<TaxiDriverEntity> getNewRequests();
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE TaxiDriverEntity a SET a.is_accepted= 1 WHERE a.taxi_driver_id= :id")
+    public int approveDriver(@Param("id") int id);
+
+    @Query("SELECT a from TaxiDriverEntity a WHERE UPPER(a.district)=UPPER(:district) AND a.is_accepted=1 ORDER BY a.first_name ASC")
+    public List<TaxiDriverEntity> getDistrictDrivers(@Param("district") String district);
 }
