@@ -34,4 +34,13 @@ public interface TravellingPlaceRepository extends JpaRepository<TravellingPlace
     @Modifying
     @Query("UPDATE TravellingPlaceEntity a SET a.is_accepted = :#{#is_accepted} where a.place_id = :#{#placeId}")
     public int approvePlace(@Param("is_accepted") int is_accepted, @Param("placeId") int placeId );
+
+    @Query("SELECT COUNT(a.place_id) from TravellingPlaceEntity a where a.is_accepted = 1")
+    public int getPlaceCount();
+
+    @Query(value = "SELECT place_name, rating, photo FROM travelling_place WHERE is_accepted=1 ORDER BY rating DESC LIMIT 5", nativeQuery = true)
+    public List<Object> getTopFive();
+
+    @Query("SELECT a from TravellingPlaceEntity a WHERE UPPER(a.district)=UPPER(:district) AND a.is_accepted=1 ORDER BY a.place_name ASC")
+    public List<TravellingPlaceEntity> getDistrictPlaces(@Param("district") String district);
 }
